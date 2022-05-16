@@ -30,7 +30,7 @@ There are a total of 100 Wave applications broadly divided into 10 sets, each wi
 #### Set 01 • Skeleton Apps • Applications 1-10
 | No  | Title | Description |
 | --- | ----- |  ---------- |
-| A01 | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_World) | A simple example |
+| A01 | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_Wave) | A simple example |
 
 #### Set 02 • Data Apps • Applications 11-20
 
