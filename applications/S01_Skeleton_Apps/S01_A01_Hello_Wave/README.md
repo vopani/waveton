@@ -12,20 +12,41 @@
 
 </div>
 
-## Hello World 🖥️
-This application is a simple example of H2O Wave.
+## Hello Wave 🖥️
+A simple example.
 
 ## Setup ⚙️
-Set up the app in your local environment:
+1. Check the version of Python, recommended to use Python 3.10+
+
+```bash
+python3 --version
+```
+
+2. Clone the repository
 
 ```bash
 git clone https://github.com/vopani/waveton.git
+```
+
+3. Create a virtual environment
+
+```bash
 cd waveton/applications/S01_Skeleton_Apps/S01_A01_Hello_World
 python3 -m venv venv
 source venv/bin/activate
+```
+
+4. Install the packages
+
+```bash
 python3 -m pip install --upgrade pip
 python3 -m pip install -r requirements.txt
+```
+
+5. Run the application
+
+```bash
 wave run app
 ```
 
-Open the app on your local browser: [http://localhost:10101](http://localhost:10101)
+6. View the application on your local browser: [http://localhost:10101](http://localhost:10101)

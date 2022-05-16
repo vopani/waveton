@@ -27,9 +27,10 @@ There are a total of 100 Wave applications broadly divided into 10 sets, each wi
 ✅ Structured as templates & tutorials - Choose your style   
 ✅ Suitable for beginners, intermediates & experts - Choose your level   
 
-The applications are best experienced using H2O Wave's [v0.21.0](https://github.com/h2oai/wave/releases/tag/v0.21.0) and is strongly recommended to use this version only.
-
 #### Set 01 • Skeleton Apps • Applications 1-10
+| No  | Title | Description |
+| --- | ----- |  ---------- |
+| A01 | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_World) | A simple example |
 
 #### Set 02 • Data Apps • Applications 11-20
 
