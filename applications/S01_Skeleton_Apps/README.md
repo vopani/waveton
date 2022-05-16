@@ -15,6 +15,7 @@
 ## Set 01 • Skeleton Apps 🖥️
 These are simple beginner-friendly applications that demonstrate various features of H2O Wave enabling new developers to learn and build their own apps.
 
-| App  | Level    | Title | Description |
-| ---- | -------- | ----- | ----------- |
-| A01  | Beginner | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_Wave) | A simple example |
+| App      | Level    | Title | Description |
+| -------- | -------- | ----- | ----------- |
+| S01_A01  | Beginner | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_Wave) | A simple example |
+| S01_A02  | Beginner | [Basic Template](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A02_Basic_Template) | Building blocks to kickstart an app |
