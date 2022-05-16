@@ -29,8 +29,10 @@ async def serve(q: Q):
 
     q.page['header'] = ui.header_card(
         box='header',
-        title='Hello World',
-        subtitle='A simple example'
+        title='Hello Wave',
+        subtitle='A simple example',
+        icon='WavingHand',
+        icon_color='black'
     )
 
     q.page['main'] = ui.form_card(
@@ -42,7 +44,7 @@ async def serve(q: Q):
 
     q.page['footer'] = ui.footer_card(
         box='footer',
-        caption='App 1 of [WaveTon: 💯 Wave Applications](https://github.com/vopani/waveton)'
+        caption='Learn more about <a href="https://github.com/vopani/waveton" target="_blank"> WaveTon: 💯 Wave Applications</a>'
     )
 
     await q.page.save()
