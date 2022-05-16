@@ -27,28 +27,28 @@ There are a total of 100 Wave applications broadly divided into 10 sets, each wi
 ✅ Structured as templates & tutorials - Choose your style   
 ✅ Suitable for beginners, intermediates & experts - Choose your level   
 
-#### Set 01 • Skeleton Apps • Applications 1-10
-| No  | Title | Description |
-| --- | ----- |  ---------- |
-| A01 | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_Wave) | A simple example |
+#### Set 01 • [Skeleton Apps](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps)
+| App  | Level    | Title | Description |
+| ---- | -------- | ----- | ---------- |
+| A01  | Beginner | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_Wave) | A simple example |
 
-#### Set 02 • Data Apps • Applications 11-20
+#### Set 02 • Data Apps
 
-#### Set 03 • Analysis Apps • Applications 21-30
+#### Set 03 • Analysis Apps
 
-#### Set 04 • Visualization Apps • Applications 31-40
+#### Set 04 • Visualization Apps
 
-#### Set 05 • Modeling Apps • Applications 41-50
+#### Set 05 • Modeling Apps
 
-#### Set 06 • Kaggle Apps • Applications 51-60
+#### Set 06 • Kaggle Apps
 
-#### Set 07 • Industry Apps • Applications 61-70
+#### Set 07 • Industry Apps
 
-#### Set 08 • H2O Apps • Applications 71-80
+#### Set 08 • H2O Apps
 
-#### Set 09 • Doppelganger Apps • Applications 81-90
+#### Set 09 • Doppelganger Apps
 
-#### Set 10 • SOTA Apps • Applications 91-100
+#### Set 10 • SOTA Apps
 
 Each application is independent and can be run by cloning the repo and running it on your local system.
 
