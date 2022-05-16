@@ -28,9 +28,10 @@ There are a total of 100 Wave applications broadly divided into 10 sets, each wi
 ✅ Suitable for beginners, intermediates & experts - Choose your level   
 
 #### Set 01 • [Skeleton Apps](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps)
-| App  | Level    | Title | Description |
-| ---- | -------- | ----- | ----------- |
-| A01  | Beginner | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_Wave) | A simple example |
+| App      | Level    | Title | Description |
+| -------- | -------- | ----- | ----------- |
+| S01_A01  | Beginner | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A01_Hello_Wave) | A simple example |
+| S01_A02  | Beginner | [Basic Template](https://github.com/vopani/waveton/tree/main/applications/S01_Skeleton_Apps/S01_A02_Basic_Template) | Building blocks to kickstart an app |
 
 #### Set 02 • Data Apps
 
