@@ -11,6 +11,8 @@ async def serve(q: Q):
     App function.
     """
 
+    logging.info('Initializing app')
+
     q.page['meta'] = ui.meta_card(
         box='',
         title='WaveTon',
@@ -19,7 +21,7 @@ async def serve(q: Q):
                 breakpoint='xs',
                 zones=[
                     ui.zone(name='header'),
-                    ui.zone(name='main'),
+                    ui.zone(name='home'),
                     ui.zone(name='footer')
                 ]
             )
@@ -35,8 +37,8 @@ async def serve(q: Q):
         icon_color='black'
     )
 
-    q.page['main'] = ui.form_card(
-        box='main',
+    q.page['home'] = ui.form_card(
+        box='home',
         items=[
             ui.text(content='Welcome to WaveTon!')
         ]
