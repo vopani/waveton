@@ -15,6 +15,8 @@
 ## Hello Wave 🖥️
 A simple example.
 
+![](screen.png)
+
 ## Setup ⚙️
 1. Check the version of Python, recommended to use Python 3.10+
 
