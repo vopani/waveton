@@ -15,10 +15,10 @@
 ## Hello Wave 🖥️
 A simple example.
 
-![](screen.png)
+![](demo.png)
 
 ## Setup ⚙️
-1. Check the version of Python, recommended to use Python 3.10+
+1. Check the version of Python, must be Python 3.7+ but recommended to use Python 3.10+ for best experience
 
 ```bash
 python3 --version
