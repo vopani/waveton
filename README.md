@@ -21,7 +21,7 @@ To showcase 100 Wave applications on different aspects of Machine Learning for p
 
 It empowers Data Scientists to quickly spin up beautiful dashboards as well as full-fledged web applications for demonstrating data science workflows.
 
-## Applications 📖
+## Applications 🖥️
 There are a total of 100 Wave applications broadly divided into 10 sets, each with 10 applications each. It is subject to periodic updates and change.
 
 ✅ Structured as templates & tutorials - Choose your style   
