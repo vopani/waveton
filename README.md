@@ -13,7 +13,7 @@
 </div>
 
 ## Mission 🚀
-To showcase 100 Wave applications on different aspects of Machine Learning for practitioners to teach and learn H2O Wave for beginners, intermediates as well as experts.
+To showcase 100 Wave applications on various data science and machine learning workstreams for beginners, intermediates as well as experts.
 
 <h2>H2O Wave <img src="https://raw.githubusercontent.com/h2oai/wave/master/assets/brand/wave-type-black.png" width="50px"></img></h2>
 
