@@ -18,7 +18,7 @@ def meta() -> ui.MetaCard:
 
     card = ui.meta_card(
         box='',
-        title='Basic Template',
+        title='WaveTon',
         layouts=[
             layouts.default()
         ],
