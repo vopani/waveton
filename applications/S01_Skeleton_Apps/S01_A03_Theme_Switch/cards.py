@@ -74,7 +74,7 @@ def error(q_app: dict, q_user: dict, q_client: dict, q_events: dict, q_args: dic
                     with the details below:</center>''',
                 visible=False
             ),
-            ui.text_l(content='Report Issue: **WaveTon**', visible=False),
+            ui.text_l(content='Report Issue in App: **Theme Switch**', visible=False),
             ui.text(content=q_app_str, visible=False),
             ui.text(content=q_user_str, visible=False),
             ui.text(content=q_client_str, visible=False),

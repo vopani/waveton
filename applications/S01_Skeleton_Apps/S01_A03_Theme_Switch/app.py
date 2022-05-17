@@ -129,10 +129,7 @@ async def restart(q: Q):
 
     logging.info('Restarting app')
 
-    q.page['meta'].redirect = '#home'
-    q.client.client_initialized = False
-
-    await q.page.save()
+    await initialize_client(q)
 
 
 @on('report')
