@@ -2,7 +2,7 @@ import logging
 
 from h2o_wave import Q, main, app, expando_to_dict, handle_on, on
 
-from . import cards
+import cards
 
 logging.basicConfig(format='%(levelname)s:\t[%(asctime)s]\t%(message)s', level=logging.INFO)
 

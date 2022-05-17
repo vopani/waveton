@@ -3,7 +3,7 @@ import traceback
 
 from h2o_wave import ui
 
-from . import layouts
+import layouts
 
 DROPPABLE_CARDS = [
     'home',
