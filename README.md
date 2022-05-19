@@ -32,14 +32,14 @@ It is recommended to go through the sets in order for best experience, but you m
 #### Set 01 • [Skeleton Apps](https://github.com/vopani/waveton/tree/main/applications/skeleton_apps)
 | App | Level        | Title | Description |
 | --- | ------------ | ----- | ----------- |
-| 1   | Beginner     | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/skeleton_apps/hello_wave) | Hello World example |
-| 2   | Beginner     | [Basic Template](https://github.com/vopani/waveton/tree/main/applications/skeleton_apps/basic_template) | Building blocks to kickstart an app |
-| 3   | Beginner     | [Theme Switch](https://github.com/vopani/waveton/tree/main/applications/skeleton_apps/theme_switch) | Switch between light and dark modes |
+| 1   | Beginner     | [Hello Wave](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/hello_wave) | Hello World example |
+| 2   | Beginner     | [Basic Template](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/basic_template) | Building blocks to kickstart an app |
+| 3   | Beginner     | [Theme Switch](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/theme_switch) | Switch between light and dark modes |
 
-#### Set 02 • [Data Apps](https://github.com/vopani/waveton/tree/main/applications/data_apps)
+#### Set 02 • [Data Apps](https://github.com/vopani/waveton/tree/main/apps/data_apps)
 | App | Level        | Title | Description |
 | --- | ------------ | ----- | ----------- |
-| 1   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/applications/data_apps/ner_annotation) | Annotate entities for Named-Entity Recognition tasks |
+| 1   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/ner_annotation) | Annotate entities for Named-Entity Recognition tasks |
 
 #### Set 03 • Analysis Apps
 
