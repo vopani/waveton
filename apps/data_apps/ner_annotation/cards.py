@@ -137,8 +137,7 @@ def ner_entities(ner_tags: list[dict]) -> ui.FormCard:
             ui.dropdown(
                 name='delete_entity_name',
                 label='Select an entity to delete',
-                choices=[ui.choice(name=tag['name'], label=tag['label']) for tag in ner_tags],
-                value=ner_tags[0]['name']
+                choices=[ui.choice(name=tag['name'], label=tag['label']) for tag in ner_tags]
             ),
             ui.buttons(
                 items=[
