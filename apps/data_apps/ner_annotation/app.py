@@ -1,12 +1,10 @@
 import logging
-import random
+from random import randint
 
 from h2o_wave import Q, main, app, copy_expando, expando_to_dict, handle_on, on
 
 import cards
 import constants
-
-r = lambda: random.randint(0, 255)
 
 logging.basicConfig(format='%(levelname)s:\t[%(asctime)s]\t%(message)s', level=logging.INFO)
 
@@ -189,7 +187,7 @@ async def add_entity(q: Q):
         q.client.ner_tags.append({
             'name': q.client.new_entity_name.lower(),
             'label': q.client.new_entity_name,
-            'color': '#{:02x}{:02x}{:02x}'.format(r(), r(), r())
+            'color': '#{:02x}{:02x}{:02x}'.format(randint(0, 255), randint(0, 255), randint(0, 255))
         })
 
     q.page['ner_entities'] = cards.ner_entities(ner_tags=q.client.ner_tags)
