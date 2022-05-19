@@ -17,6 +17,6 @@ Simple beginner-friendly applications that demonstrate various features of H2O W
 
 | App | Level        | Title | Description |
 | --- | ------------ | ----- | ----------- |
-| 1   | Beginner     | [Hello Wave](https://github.com/vopani/waveton/tree/main/applications/skeleton_apps/hello_wave) | Hello World example |
-| 2   | Beginner     | [Basic Template](https://github.com/vopani/waveton/tree/main/applications/skeleton_apps/basic_template) | Building blocks to kickstart an app |
-| 3   | Beginner     | [Theme Switch](https://github.com/vopani/waveton/tree/main/applications/skeleton_apps/theme_switch) | Switch between light and dark modes |
+| 1   | Beginner     | [Hello Wave](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/hello_wave) | Hello World example |
+| 2   | Beginner     | [Basic Template](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/basic_template) | Building blocks to kickstart an app |
+| 3   | Beginner     | [Theme Switch](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/theme_switch) | Switch between light and dark modes |

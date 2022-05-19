@@ -17,4 +17,4 @@ Applications that help with data preparation, cleaning, transformation, annotati
 
 | App | Level        | Title | Description |
 | --- | ------------ | ----- | ----------- |
-| 1   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/applications/data_apps/ner_annotation) | Annotate entities for Named-Entity Recognition tasks |
+| 1   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/ner_annotation) | Annotate entities for Named-Entity Recognition tasks |
