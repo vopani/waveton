@@ -151,7 +151,12 @@ def ner_entities(ner_tags: list[dict]) -> ui.FormCard:
     return card
 
 
-def ner_annotator(ner_tags: list[dict], ner_items: list[dict]) -> ui.FormCard:
+def ner_annotator(
+    ner_tags: list[dict],
+    ner_items: list[dict],
+    disable_next: bool = False,
+    disable_previous: bool = False
+) -> ui.FormCard:
     """
     Card for NER annotator.
     """
@@ -167,8 +172,8 @@ def ner_annotator(ner_tags: list[dict], ner_items: list[dict]) -> ui.FormCard:
             ),
             ui.buttons(
                 items=[
-                    ui.button(name='next', label='Next', primary=True),
-                    ui.button(name='previous', label='Previous')
+                    ui.button(name='next', label='Next', primary=True, disabled=disable_next),
+                    ui.button(name='previous', label='Previous', disabled=disable_previous)
                 ]
             )
         ]
