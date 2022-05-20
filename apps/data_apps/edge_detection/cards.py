@@ -128,18 +128,42 @@ def command_panel() -> ui.FormCard:
                 label="Upload",
                 multiple=False,
                 file_extensions=['jpeg', 'png'],
-            )
+            ),
         ],
     )
 
 
-def image_viewer() -> ui.FormCard:
+def original_image_viewer() -> ui.FormCard:
     """
-    Card to display image.
+    Card to display original image.
     """
     return ui.form_card(
-        box='main',
+        box='main_top_left',
         items=[
-            ui.text_xl("Need to display image here")
+            ui.text_xl("Original image goes here")
+        ]
+    )
+
+
+def processed_image_viewer() -> ui.FormCard:
+    """
+    Card to display processed image.
+    """
+    return ui.form_card(
+        box='main_top_left',
+        items=[
+            ui.text_xl("Processed image goes here")
+        ]
+    )
+
+
+def image_table() -> ui.FormCard:
+    """
+    Card to display uploaded image table.
+    """
+    return ui.form_card(
+        box='main_bottom',
+        items=[
+            ui.text_xl("Image table goes here")
         ]
     )

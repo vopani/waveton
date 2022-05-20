@@ -12,7 +12,9 @@ async def setup_home(q: Q):
     q.page['meta'] = cards.meta()
     q.page['header'] = cards.header()
     q.page['commands_panel'] = cards.command_panel()
-    q.page['image_viewer'] = cards.image_viewer()
+    q.page['original_image_viewer'] = cards.original_image_viewer()
+    q.page['processed_image_viewer'] = cards.processed_image_viewer()
+    q.page['image_table'] = cards.image_table()
     q.page['footer'] = cards.footer()
 
     await q.page.save()

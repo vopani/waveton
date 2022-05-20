@@ -18,5 +18,7 @@ class EdgeDetectionKernels(Enum):
 DROPPABLE_CARDS = [
     'error',
     'commands_panel',
-    'image_viewer'
+    'original_image_viewer',
+    'processed_image_viewer',
+    'image_table'
 ]
