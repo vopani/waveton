@@ -12,6 +12,7 @@ def default() -> ui.Layout:
             ui.zone(name='header'),
             ui.zone(
                 name='home',
+                size='calc(100vh - 150px)',
                 direction='row',
                 zones=[
                     ui.zone(name='ner_entities', size='20%'),
