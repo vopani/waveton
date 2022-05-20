@@ -1,7 +1,7 @@
 import logging
 from enum import Enum
 
-logging.root.setLevel(logging.NOTSET)
+logging.root.setLevel(logging.DEBUG)
 
 DEFAULT_LOGGER = logging.getLogger("edge-detector-logger")
 logging_stream_handler = logging.StreamHandler()

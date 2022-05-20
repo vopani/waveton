@@ -1,7 +1,11 @@
+import os
+import pandas as pd
+
 from h2o_wave import Q
 
 from constants import DEFAULT_LOGGER
 from actions import setup_home, update_theme
+from wave_utils import load_sample_images
 
 
 async def initialize_app(q: Q):
@@ -12,6 +16,13 @@ async def initialize_app(q: Q):
         return
 
     DEFAULT_LOGGER.info('Initializing app')
+
+    # initialize images dir
+    q.app.images_dir = os.path.abspath("./images")
+    os.makedirs(q.app.images_dir, exist_ok=True)
+
+    # dataframe for image records
+    q.app.image_df = await load_sample_images(q)
 
     q.app.app_initialized = True
 

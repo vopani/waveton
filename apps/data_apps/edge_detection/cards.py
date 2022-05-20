@@ -1,5 +1,6 @@
 import sys
 import traceback
+import pandas as pd
 
 from h2o_wave import ui
 
@@ -157,13 +158,41 @@ def processed_image_viewer() -> ui.FormCard:
     )
 
 
-def image_table() -> ui.FormCard:
+def image_table(image_df: pd.DataFrame) -> ui.FormCard:
     """
     Card to display uploaded image table.
     """
+    columns = [
+        ui.table_column(
+            name="image_name",
+            label="Image",
+            sortable=True,
+            searchable=True,
+            link=True,
+        ),
+        ui.table_column(
+            name="uploaded_time",
+            label="Uploaded At",
+            sortable=True,
+        )
+    ]
+
+    rows = [
+        ui.table_row(
+            name=row.Image,
+            cells=[row.Image, row.Timestamp]
+        ) for row in image_df.itertuples()
+    ]
+
+    table = ui.table(
+        name="image_table",
+        columns=columns,
+        rows=rows,
+        height='calc(((100vh - 150px)/2) - 50px)'
+    )
     return ui.form_card(
         box='main_bottom',
         items=[
-            ui.text_xl("Image table goes here")
+            table
         ]
     )
