@@ -158,7 +158,7 @@ def ner_annotator(ner_tags: list[dict], ner_items: list[dict]) -> ui.FormCard:
     """
 
     card = ui.form_card(
-        box='ner_annotator',
+        box=ui.box('ner_annotator', height="calc(100vh - 150px)"),
         items=[
             ui.text_annotator(
                 name='ner_annotator',
