@@ -79,6 +79,8 @@ async def initialize_client(q: Q):
     q.client.ner_tags = constants.NER_TAGS
     q.client.ner_data = constants.NER_DATA
     q.client.ner_index = 0
+    q.client.disable_next = False
+    q.client.disable_previous = True
 
     q.client.client_initialized = True
 
@@ -95,7 +97,9 @@ async def setup_home(q: Q):
     q.page['ner_entities'] = cards.ner_entities(ner_tags=q.client.ner_tags)
     q.page['ner_annotator'] = cards.ner_annotator(
         ner_tags=q.client.ner_tags,
-        ner_items=q.client.ner_data[q.client.ner_index]
+        ner_items=q.client.ner_data[q.client.ner_index],
+        disable_next=q.client.disable_next,
+        disable_previous=q.client.disable_previous
     )
     q.page['footer'] = cards.footer()
 
@@ -137,14 +141,17 @@ async def show_next_text(q: Q):
     copy_expando(q.args, q.client)
     q.client.ner_data[q.client.ner_index] = q.client.ner_annotator
 
+    q.client.ner_index += 1
+    q.client.disable_previous = False
+
     if q.client.ner_index == len(q.client.ner_data) - 1:
-        q.client.ner_index = 0
-    else:
-        q.client.ner_index += 1
+        q.client.disable_next = True
 
     q.page['ner_annotator'] = cards.ner_annotator(
         ner_tags=q.client.ner_tags,
-        ner_items=q.client.ner_data[q.client.ner_index]
+        ner_items=q.client.ner_data[q.client.ner_index],
+        disable_next=q.client.disable_next,
+        disable_previous=q.client.disable_previous
     )
 
     await q.page.save()
@@ -160,14 +167,17 @@ async def show_previous_text(q: Q):
     copy_expando(q.args, q.client)
     q.client.ner_data[q.client.ner_index] = q.client.ner_annotator
 
+    q.client.ner_index -= 1
+    q.client.disable_next = False
+
     if q.client.ner_index == 0:
-        q.client.ner_index = len(q.client.ner_data) - 1
-    else:
-        q.client.ner_index -= 1
+        q.client.disable_previous = True
 
     q.page['ner_annotator'] = cards.ner_annotator(
         ner_tags=q.client.ner_tags,
-        ner_items=q.client.ner_data[q.client.ner_index]
+        ner_items=q.client.ner_data[q.client.ner_index],
+        disable_next=q.client.disable_next,
+        disable_previous=q.client.disable_previous
     )
 
     await q.page.save()
@@ -193,7 +203,9 @@ async def add_entity(q: Q):
     q.page['ner_entities'] = cards.ner_entities(ner_tags=q.client.ner_tags)
     q.page['ner_annotator'] = cards.ner_annotator(
         ner_tags=q.client.ner_tags,
-        ner_items=q.client.ner_data[q.client.ner_index]
+        ner_items=q.client.ner_data[q.client.ner_index],
+        disable_next=q.client.disable_next,
+        disable_previous=q.client.disable_previous
     )
 
     await q.page.save()
@@ -220,7 +232,9 @@ async def delete_entity(q: Q):
     q.page['ner_entities'] = cards.ner_entities(ner_tags=q.client.ner_tags)
     q.page['ner_annotator'] = cards.ner_annotator(
         ner_tags=q.client.ner_tags,
-        ner_items=q.client.ner_data[q.client.ner_index]
+        ner_items=q.client.ner_data[q.client.ner_index],
+        disable_next=q.client.disable_next,
+        disable_previous=q.client.disable_previous
     )
 
     await q.page.save()
