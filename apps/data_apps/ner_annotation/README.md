@@ -33,7 +33,7 @@ git clone https://github.com/vopani/waveton.git
 3. Create a virtual environment
 
 ```bash
-cd waveton/apps/skeleton_apps/ner_annotation
+cd waveton/apps/data_apps/ner_annotation
 python3 -m venv venv
 source venv/bin/activate
 ```
