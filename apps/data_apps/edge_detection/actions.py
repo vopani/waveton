@@ -8,12 +8,11 @@ async def setup_home(q: Q):
     """
     Set up home page of app.
     """
-
     q.page['meta'] = cards.meta()
     q.page['header'] = cards.header()
     q.page['commands_panel'] = cards.command_panel()
-    q.page['original_image_viewer'] = cards.original_image_viewer()
-    q.page['processed_image_viewer'] = cards.processed_image_viewer()
+    q.page['original_image_viewer'] = cards.original_image_viewer(q.client.selected_image)
+    q.page['processed_image_viewer'] = cards.processed_image_viewer(q.client.selected_processed_image)
     q.page['image_table'] = cards.image_table(q.app.image_df)
     q.page['footer'] = cards.footer()
 

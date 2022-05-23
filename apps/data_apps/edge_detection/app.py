@@ -1,5 +1,6 @@
 from h2o_wave import Q, main, app, handle_on, expando_to_dict
 
+import handlers
 from actions import handle_error
 from initializers import initialize_app, initialize_client
 from constants import DEFAULT_LOGGER

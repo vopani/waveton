@@ -1,5 +1,6 @@
 import sys
 import traceback
+
 import pandas as pd
 
 from h2o_wave import ui
@@ -125,7 +126,7 @@ def command_panel() -> ui.FormCard:
         items=[
             ui.text_xl("Command Panel"),
             ui.file_upload(
-                name="Image Uploader",
+                name="image_uploader",
                 label="Upload",
                 multiple=False,
                 file_extensions=['jpeg', 'png'],
@@ -134,27 +135,25 @@ def command_panel() -> ui.FormCard:
     )
 
 
-def original_image_viewer() -> ui.FormCard:
+def original_image_viewer(image_path) -> ui.ImageCard:
     """
     Card to display original image.
     """
-    return ui.form_card(
+    return ui.image_card(
         box='main_top_left',
-        items=[
-            ui.text_xl("Original image goes here")
-        ]
+        title="Original Image",
+        path=image_path
     )
 
 
-def processed_image_viewer() -> ui.FormCard:
+def processed_image_viewer(image_path) -> ui.ImageCard:
     """
     Card to display processed image.
     """
-    return ui.form_card(
-        box='main_top_left',
-        items=[
-            ui.text_xl("Processed image goes here")
-        ]
+    return ui.image_card(
+        box='main_top_right',
+        title="Processed Image",
+        path=image_path
     )
 
 
@@ -169,6 +168,7 @@ def image_table(image_df: pd.DataFrame) -> ui.FormCard:
             sortable=True,
             searchable=True,
             link=True,
+            max_width="750px"
         ),
         ui.table_column(
             name="uploaded_time",
@@ -188,7 +188,7 @@ def image_table(image_df: pd.DataFrame) -> ui.FormCard:
         name="image_table",
         columns=columns,
         rows=rows,
-        height='calc(((100vh - 150px)/2) - 50px)'
+        height='calc(((100vh - 150px)/3) - 75px)'
     )
     return ui.form_card(
         box='main_bottom',

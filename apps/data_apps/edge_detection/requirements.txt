@@ -1,1 +1,3 @@
 h2o_wave==0.21.1
+opencv-python
+pandas

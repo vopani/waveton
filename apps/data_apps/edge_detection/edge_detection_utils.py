@@ -24,3 +24,9 @@ def edge_detection(image: np.array, kernel: str = EdgeDetectionKernels.LAPLACE, 
         sob_gradient_y = np.uint(np.absolute(sob_gradient_y))
 
         return cv2.bitwise_or(sob_gradient_x, sob_gradient_y)
+
+
+def resize_image(image_path) -> None:
+    img = cv2.imread(image_path)
+    img = cv2.resize(img, (100, 100))
+    cv2.imwrite(image_path, img)

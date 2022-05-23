@@ -48,14 +48,14 @@ def default() -> ui.Layout:
                         zones=[
                             ui.zone(
                                 name="main_top",
-                                size="50%",
+                                size="70%",
                                 direction=ui.ZoneDirection.ROW,
                                 zones=[
-                                    ui.zone(name="main_top_left", size="100%", direction=ui.ZoneDirection.ROW),
-                                    ui.zone(name="main_top_right", size="100%", direction=ui.ZoneDirection.ROW)
+                                    ui.zone(name="main_top_left", size="50%", direction=ui.ZoneDirection.ROW),
+                                    ui.zone(name="main_top_right", size="50%", direction=ui.ZoneDirection.ROW)
                                 ]
                             ),
-                            ui.zone(name="main_bottom", size="50%")
+                            ui.zone(name="main_bottom", size="30%")
                         ]
                     )
                 ]
