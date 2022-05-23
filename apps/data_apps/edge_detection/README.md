@@ -12,8 +12,8 @@
 
 </div>
 
-## NER Annotation 🖥️
-Annotate entities for Named-Entity Recognition tasks.
+## Edge Detector 🖥️
+Find edges on images using LAPLACIAN & SOBEL Kernels. 
 
 ![](demo.gif)
 
@@ -33,7 +33,7 @@ git clone https://github.com/vopani/waveton.git
 3. Create a virtual environment
 
 ```bash
-cd waveton/apps/skeleton_apps/ner_annotation
+cd waveton/apps/data-apps/edge-detection
 python3 -m venv venv
 source venv/bin/activate
 ```
