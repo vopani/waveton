@@ -136,3 +136,5 @@ dmypy.json
 
 # Apps
 *sound.wav
+apps/data_apps/edge_detection/images/*
+!apps/data_apps/edge_detection/images/lena.png
