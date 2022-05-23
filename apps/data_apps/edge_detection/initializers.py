@@ -2,7 +2,7 @@ import os
 
 from h2o_wave import Q
 
-from constants import DEFAULT_LOGGER
+from constants import DEFAULT_LOGGER, EdgeDetectionKernels
 from actions import setup_home, update_theme
 from wave_utils import load_sample_images
 
@@ -41,9 +41,15 @@ async def initialize_client(q: Q):
 
     q.client.theme_dark = True
 
-    q.client.client_initialized = True
+    q.client.selected_image_local_copy = os.path.join(q.app.images_dir, "lena.png")
     q.client.selected_image = q.app.image_df['Image'][0]
     q.client.selected_processed_image = q.app.image_df['Processed_Image'][0]
+
+    q.client.edge_detection_kernel = EdgeDetectionKernels.SOBEL.value
+    q.client.gaussian_blur = True
+    q.client.gaussian_kernel_size = 3
+
+    q.client.client_initialized = True
 
     await setup_home(q)
     await q.page.save()

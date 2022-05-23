@@ -17,7 +17,6 @@ async def serve(q: Q):
         await initialize_app(q)
         await initialize_client(q)
         await handle_on(q)
-
     except Exception as error:
         await handle_error(q, error=str(error))
 

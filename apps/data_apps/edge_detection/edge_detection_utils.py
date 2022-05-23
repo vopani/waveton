@@ -8,15 +8,20 @@ def gaussian_blurring(image: np.array, filter_size: tuple = (5, 5), std: float =
     return cv2.GaussianBlur(image, filter_size, std)
 
 
-def edge_detection(image: np.array, kernel: str = EdgeDetectionKernels.LAPLACE, smoothing: bool = False):
+def edge_detection(
+        image: np.array,
+        kernel: str = EdgeDetectionKernels.LAPLACE.value,
+        smoothing: bool = False,
+        smoothing_kernel_size: int = 3
+):
     if smoothing:
-        image = gaussian_blurring(image, (3, 3), 0)
-    if kernel == EdgeDetectionKernels.LAPLACE:
+        image = gaussian_blurring(image, (smoothing_kernel_size, smoothing_kernel_size), 0)
+    if kernel == EdgeDetectionKernels.LAPLACE.value:
         lap_gradient = cv2.Laplacian(image, cv2.CV_64F)
         lap_gradient = np.uint(np.absolute(lap_gradient))
 
         return lap_gradient
-    elif kernel == EdgeDetectionKernels.SOBEL:
+    elif kernel == EdgeDetectionKernels.SOBEL.value:
         sob_gradient_x = cv2.Sobel(image, cv2.CV_64F, 1, 0)
         sob_gradient_y = cv2.Sobel(image, cv2.CV_64F, 0, 1)
 

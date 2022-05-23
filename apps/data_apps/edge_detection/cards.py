@@ -6,6 +6,7 @@ import pandas as pd
 from h2o_wave import ui
 
 import layouts
+from constants import EdgeDetectionKernels
 
 
 def meta() -> ui.MetaCard:
@@ -116,10 +117,21 @@ def footer() -> ui.FooterCard:
     return card
 
 
-def command_panel() -> ui.FormCard:
+def command_panel(edge_detection_kernel, gaussian_blur, gaussian_kernel_size) -> ui.FormCard:
     """
     Card for control panel.
     """
+
+    kernel_choices = [
+        ui.choice(
+            name=EdgeDetectionKernels.LAPLACE.value,
+            label=EdgeDetectionKernels.LAPLACE.value
+        ),
+        ui.choice(
+            name=EdgeDetectionKernels.SOBEL.value,
+            label=EdgeDetectionKernels.SOBEL.value
+        )
+    ]
 
     return ui.form_card(
         box='commands',
@@ -131,6 +143,42 @@ def command_panel() -> ui.FormCard:
                 multiple=False,
                 file_extensions=['jpeg', 'png'],
             ),
+            ui.separator(),
+            ui.text_xl("Kernel Configurations"),
+            ui.choice_group(
+                name="edge_detection_kernel",
+                label="Select Kernel",
+                choices=kernel_choices,
+                value=edge_detection_kernel
+            ),
+            ui.separator(),
+            ui.text_xl("Blur Configurations"),
+            ui.checkbox(
+                name="gaussian_blur",
+                label="Apply Gaussian Blur for Smoothing",
+                value=gaussian_blur,
+            ),
+            ui.text_xl("\n"),
+            ui.slider(
+                name="gaussian_kernel_size",
+                label="Blur Kernel Size",
+                min=3,
+                max=21,
+                step=2,
+                value=gaussian_kernel_size
+            ),
+            ui.text_xl("\n"),
+            ui.buttons(
+                items=[
+                    ui.button(
+                        name="run_edge_detection",
+                        label="Detect",
+                        primary=True,
+                        icon="Search"
+                    )
+                ]
+            )
+
         ],
     )
 

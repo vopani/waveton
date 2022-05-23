@@ -3,10 +3,10 @@ import os.path
 from h2o_wave import Q, on
 
 import cards
-from actions import drop_cards, update_theme
+from actions import drop_cards
 from constants import DROPPABLE_CARDS, DEFAULT_LOGGER
 from initializers import initialize_client
-from utils import update_image_df
+from utils import update_image_df, apply_edge_detection
 
 
 @on('restart')
@@ -72,9 +72,46 @@ async def image_table(q: Q):
         os.path.join(q.app.images_dir, os.path.basename(q.args.image_table[0]))
     )
 
-    print(q.client.selected_image_local_copy)
-
     q.page['original_image_viewer'] = cards.original_image_viewer(q.client.selected_image)
     q.page['processed_image_viewer'] = cards.processed_image_viewer(q.client.selected_processed_image)
 
+    await q.page.save()
+
+
+@on()
+async def run_edge_detection(q: Q):
+    """
+    Apply edge detection on selected image.
+    """
+    DEFAULT_LOGGER.info("Applying edge detection")
+
+    if q.args.edge_detection_kernel:
+        q.client.edge_detection_kernel = q.args.edge_detection_kernel
+
+    if q.args.gaussian_blur:
+        q.client.gaussian_blur = q.args.gaussian_blur
+
+    if q.args.gaussian_kernel_size:
+        q.client.gaussian_kernel_size = q.args.gaussian_kernel_size
+
+    print(q.client.selected_image_local_copy)
+    processed_image = apply_edge_detection(
+        [q.client.selected_image_local_copy],
+        processed_folder=q.app.processed_dir,
+        edge_detection_kernel=q.client.edge_detection_kernel,
+        smoothing=q.client.gaussian_blur,
+        smoothing_kernel_size=q.client.gaussian_kernel_size
+    )
+
+    uploaded = await q.site.upload(
+        processed_image
+    )
+
+    q.client.selected_processed_image = uploaded[0]
+
+    q.app.image_df.loc[
+        q.app.image_df.Image == q.client.selected_image, "Processed_Image"
+    ] = q.client.selected_processed_image
+
+    q.page['processed_image_viewer'] = cards.processed_image_viewer(q.client.selected_processed_image)
     await q.page.save()
