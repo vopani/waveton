@@ -94,7 +94,7 @@ def header() -> ui.HeaderCard:
 
     card = ui.header_card(
         box='header',
-        title='Basic Workflow',
+        title='Basic Template',
         subtitle='Building blocks to kickstart an app',
         icon='BuildQueue',
         icon_color='black'
