@@ -69,8 +69,8 @@ def error(q_app: dict, q_user: dict, q_client: dict, q_events: dict, q_args: dic
             ui.separator(visible=False),
             ui.text(
                 content='''<center>
-                    To report this issue, please open an issue on 
-                    <a href="https://github.com/vopani/waveton/issues/new" target="_blank">https://github.com/vopani/waveton/issues/new</a>
+                    To report this issue, please open an 
+                    <a href="https://github.com/vopani/waveton/issues/new?assignees=vopani&labels=bug&template=error-report.md&title=%5BERROR%5D" target="_blank">Issue on GitHub</a>
                     with the details below:</center>''',
                 visible=False
             ),
