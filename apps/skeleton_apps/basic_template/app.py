@@ -1,73 +1,81 @@
 import logging
 
-from h2o_wave import Q, main, app, expando_to_dict, handle_on, on
+from h2o_wave import Q, main, app, ui, handle_on, on
 
 import cards
 
+# Set up logging
 logging.basicConfig(format='%(levelname)s:\t[%(asctime)s]\t%(message)s', level=logging.INFO)
 
 
 @app('/')
 async def serve(q: Q):
     """
-    App function.
+    Main entry point. All queries pass through this function.
     """
 
     try:
-        # initialize app
-        if not q.app.app_initialized:
+        # Initialize the app if not already.
+        if not q.app.initialized:
             await initialize_app(q)
+            q.app.initialized = True  # Mark as initialized at the app level (global to all clients).
 
-        # initialize client
-        if not q.client.client_initialized:
+        # Initialize the client (browser tab) if not already.
+        if not q.client.initialized:
             await initialize_client(q)
+            q.client.initialized = True  # Mark as initialized at the client (browser tab) level.
 
-        # handle ons
+        # Delegate query to query handlers.
         elif await handle_on(q):
             pass
 
-        # dummy update for edge cases
+        # This condition should never execute unless there is a bug in our code.
+        # Adding this condition here helps us identify those cases (instead of seeing a blank page in the browser).
         else:
-            await update_dummy(q)
+            await handle_fallback(q)
 
     except Exception as error:
-        await handle_error(q, error=str(error))
+        await show_error(q, error=str(error))
 
 
 async def initialize_app(q: Q):
     """
-    Initializing app.
+    Initialize the app.
     """
 
+    # TODO: Add app-level initialization logic here (loading datasets, database connections, etc.)
     logging.info('Initializing app')
-
-    q.app.app_initialized = True
 
 
 async def initialize_client(q: Q):
     """
-    Initializing client.
+    Initialize the client (browser tab).
     """
 
     logging.info('Initializing client')
 
-    q.client.theme_dark = True
+    # Add layouts, header and footer.
+    q.page['meta'] = cards.meta
+    q.page['header'] = cards.header
+    q.page['footer'] = cards.footer
 
-    q.page['meta'] = cards.meta()
-    q.page['header'] = cards.header()
-    q.page['home'] = cards.home()
-    q.page['footer'] = cards.footer()
+    # Add cards for the home page.
+    q.page['home'] = ui.form_card(
+        box='home',
+        items=[
+            ui.text('This is a great starting point to build an app.')
+        ]
+    )
 
-    q.page['dummy'] = cards.dummy()
+    # TODO: Add more cards to the home page.
 
-    q.client.client_initialized = True
-
+    # Save the page
     await q.page.save()
 
 
-async def drop_cards(q: Q, card_names: list):
+def drop_cards(q: Q, card_names: list):
     """
-    Drop cards from Wave page.
+    Drop cards from the page.
     """
 
     logging.info('Clearing cards')
@@ -76,65 +84,45 @@ async def drop_cards(q: Q, card_names: list):
         del q.page[card_name]
 
 
-async def handle_error(q: Q, error: str):
+async def show_error(q: Q, error: str):
     """
-    Handle any app error.
+    Display errors.
     """
 
     logging.error(error)
 
-    await drop_cards(q, cards.DROPPABLE_CARDS)
+    # Drop all cards from the page.
+    drop_cards(q, ['home'])
 
-    q.page['error'] = cards.error(
-        q_app=expando_to_dict(q.app),
-        q_user=expando_to_dict(q.user),
-        q_client=expando_to_dict(q.client),
-        q_events=expando_to_dict(q.events),
-        q_args=expando_to_dict(q.args)
-    )
+    # Format and display the error.
+    q.page['error'] = cards.create_crash_report(q)
 
     await q.page.save()
 
 
-@on('restart')
-async def restart(q: Q):
+@on('reload')
+async def reload_client(q: Q):
     """
-    Restart app.
+    Reset the client (browser tab).
+    This function is called when the user clicks "Reload" on the crash report.
     """
 
-    logging.info('Restarting app')
+    logging.info('Reloading client')
 
     await initialize_client(q)
 
 
-@on('report')
-async def report(q: Q):
+async def handle_fallback(q: Q):
     """
-    Report error details.
-    """
-
-    logging.info('Displaying error details')
-
-    q.page['error'].items[4].separator.visible = True
-    q.page['error'].items[5].text.visible = True
-    q.page['error'].items[6].text_l.visible = True
-    q.page['error'].items[7].text.visible = True
-    q.page['error'].items[8].text.visible = True
-    q.page['error'].items[9].text.visible = True
-    q.page['error'].items[10].text.visible = True
-    q.page['error'].items[11].text.visible = True
-    q.page['error'].items[12].text.visible = True
-
-    await q.page.save()
-
-
-async def update_dummy(q: Q):
-    """
-    Dummy update for edge cases.
+    Fallback handling.
+    This function should never get called unless there is a bug in our code or query handling logic.
     """
 
-    logging.info('Adding dummy page')
+    logging.info('Adding fallback page')
 
-    q.page['dummy'].items = []
+    q.page['fallback'] = ui.form_card(
+        box='fallback',
+        items=[ui.text('Uh-oh, something went wrong!')]
+    )
 
     await q.page.save()
