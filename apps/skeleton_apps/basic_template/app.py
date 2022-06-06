@@ -40,7 +40,7 @@ async def serve(q: Q):
 
 async def initialize_app(q: Q):
     """
-    Initialize the app.
+    Initializes the app.
     """
 
     # TODO: Add app-level initialization logic here (loading datasets, database connections, etc.)
@@ -49,7 +49,7 @@ async def initialize_app(q: Q):
 
 async def initialize_client(q: Q):
     """
-    Initialize the client (browser tab).
+    Initializes the client (browser tab).
     """
 
     logging.info('Initializing client')
@@ -75,7 +75,7 @@ async def initialize_client(q: Q):
 
 def drop_cards(q: Q, card_names: list):
     """
-    Drop cards from the page.
+    Drops cards from the page.
     """
 
     logging.info('Clearing cards')
@@ -86,7 +86,7 @@ def drop_cards(q: Q, card_names: list):
 
 async def show_error(q: Q, error: str):
     """
-    Display errors.
+    Displays errors.
     """
 
     logging.error(error)
@@ -103,7 +103,7 @@ async def show_error(q: Q, error: str):
 @on('reload')
 async def reload_client(q: Q):
     """
-    Reset the client (browser tab).
+    Resets the client (browser tab).
     This function is called when the user clicks "Reload" on the crash report.
     """
 
@@ -114,7 +114,7 @@ async def reload_client(q: Q):
 
 async def handle_fallback(q: Q):
     """
-    Fallback handling.
+    Handles fallback cases.
     This function should never get called unless there is a bug in our code or query handling logic.
     """
 
