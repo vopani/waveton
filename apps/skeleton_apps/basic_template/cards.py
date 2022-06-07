@@ -1,7 +1,7 @@
 import sys
 import traceback
 
-from h2o_wave import ui, Q, expando_to_dict
+from h2o_wave import Q, expando_to_dict, ui
 
 # App name
 app_name = 'Basic Template'
@@ -10,7 +10,7 @@ app_name = 'Basic Template'
 repo_url = 'https://github.com/vopani/waveton'
 issue_url = f'{repo_url}/issues/new?assignees=vopani&labels=bug&template=error-report.md&title=%5BERROR%5D'
 
-# A meta card to hold the app's layouts
+# A meta card to hold the app's title, layouts, dialogs, theme and other meta information
 meta = ui.meta_card(
     box='',
     title='WaveTon',
@@ -19,7 +19,7 @@ meta = ui.meta_card(
             breakpoint='xs',
             zones=[
                 ui.zone(name='header'),
-                ui.zone(name='home'),
+                ui.zone(name='main'),
                 ui.zone(name='error'),
                 ui.zone(name='footer')
             ]
@@ -44,8 +44,8 @@ footer = ui.footer_card(
 )
 
 # Additional cards for the app's pages
-home = ui.form_card(
-    box='home',
+main = ui.form_card(
+    box='main',
     items=[
         ui.text('This is a great starting point to build an app.')
     ]
@@ -58,7 +58,7 @@ fallback = ui.form_card(
 )
 
 
-def create_crash_report(q: Q) -> ui.FormCard:
+def crash_report(q: Q) -> ui.FormCard:
     """
     Card for capturing the stack trace and current application state, for error reporting.
     This function is called by the main serve() loop on uncaught exceptions.

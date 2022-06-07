@@ -11,8 +11,9 @@ async def serve(q: Q):
     App function.
     """
 
-    logging.info('Initializing app')
+    logging.info('Initializing the app')
 
+    # A meta card to hold the app's title, layouts, dialogs, theme and other meta information
     q.page['meta'] = ui.meta_card(
         box='',
         title='WaveTon',
@@ -29,6 +30,7 @@ async def serve(q: Q):
         theme='h2o-dark'
     )
 
+    # The header shown on all the app's pages
     q.page['header'] = ui.header_card(
         box='header',
         title='Hello Wave',
@@ -37,16 +39,19 @@ async def serve(q: Q):
         icon_color='black'
     )
 
-    q.page['home'] = ui.form_card(
-        box='home',
+    # The main card of the app
+    q.page['main'] = ui.form_card(
+        box='main',
         items=[
             ui.text(content='Welcome to WaveTon!')
         ]
     )
 
+    # The footer shown on all the app's pages
     q.page['footer'] = ui.footer_card(
         box='footer',
         caption='Learn more about <a href="https://github.com/vopani/waveton" target="_blank"> WaveTon: 💯 Wave Applications</a>'
     )
 
+    # Save the page
     await q.page.save()
