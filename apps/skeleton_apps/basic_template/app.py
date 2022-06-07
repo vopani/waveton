@@ -60,10 +60,10 @@ async def initialize_client(q: Q):
     q.page['header'] = cards.header
     q.page['footer'] = cards.footer
 
-    # Add cards for the home page
-    q.page['home'] = cards.home
+    # Add cards for the main page
+    q.page['main'] = cards.main
 
-    # Add more cards to the home page
+    # Add more cards to the page
 
     # Save the page
     await q.page.save()
@@ -88,10 +88,10 @@ async def show_error(q: Q, error: str):
     logging.error(error)
 
     # Clear all cards from the page
-    clear_cards(q, ['home'])
+    clear_cards(q, ['main'])
 
     # Format and display the error
-    q.page['error'] = cards.create_crash_report(q)
+    q.page['error'] = cards.crash_report(q)
 
     await q.page.save()
 
@@ -105,6 +105,7 @@ async def reload_client(q: Q):
 
     logging.info('Reloading client')
 
+    # Reload the client
     await initialize_client(q)
 
 
