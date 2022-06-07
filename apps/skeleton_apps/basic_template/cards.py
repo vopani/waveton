@@ -3,10 +3,14 @@ import traceback
 
 from h2o_wave import ui, Q, expando_to_dict
 
-# Link to repo. Report bugs/features here :)
-issue_link = 'https://github.com/vopani/waveton/issues/new?assignees=vopani&labels=bug&template=error-report.md&title=%5BERROR%5D'
+# App name
+app_name = 'Basic Template'
 
-# A meta card to hold our app's layouts
+# Link to repo. Report bugs/features here :)
+repo_url = 'https://github.com/vopani/waveton'
+issue_url = f'{repo_url}/issues/new?assignees=vopani&labels=bug&template=error-report.md&title=%5BERROR%5D'
+
+# A meta card to hold the app's layouts
 meta = ui.meta_card(
     box='',
     title='WaveTon',
@@ -24,7 +28,7 @@ meta = ui.meta_card(
     theme='h2o-dark'
 )
 
-# The header shown on all our app's pages.
+# The header shown on all the app's pages
 header = ui.header_card(
     box='header',
     title='Basic Template',
@@ -33,16 +37,30 @@ header = ui.header_card(
     icon_color='black'
 )
 
-# The footer shown on all our app's pages.
+# The footer shown on all the app's pages
 footer = ui.footer_card(
     box='footer',
-    caption='Learn more about <a href="https://github.com/vopani/waveton" target="_blank"> WaveTon: 💯 Wave Applications</a>'
+    caption=f'Learn more about <a href="{repo_url}" target="_blank"> WaveTon: 💯 Wave Applications</a>'
+)
+
+# Additional cards for the app's pages
+home = ui.form_card(
+    box='home',
+    items=[
+        ui.text('This is a great starting point to build an app.')
+    ]
+)
+
+# A fallback card for handling bugs
+fallback = ui.form_card(
+    box='fallback',
+    items=[ui.text('Uh-oh, something went wrong!')]
 )
 
 
 def create_crash_report(q: Q) -> ui.FormCard:
     """
-    Creates a card that captures the stack trace and current application state, for error reporting.
+    Card for capturing the stack trace and current application state, for error reporting.
     This function is called by the main serve() loop on uncaught exceptions.
     """
 
@@ -61,7 +79,7 @@ def create_crash_report(q: Q) -> ui.FormCard:
         ('q.user', q.user),
         ('q.client', q.client),
         ('q.events', q.events),
-        ('q.args', q.args),
+        ('q.args', q.args)
     ]
     for name, source in states:
         dump.append(f'### {name}')
@@ -85,9 +103,9 @@ def create_crash_report(q: Q) -> ui.FormCard:
             ui.buttons(items=[ui.button(name='reload', label='Reload', primary=True)]),
             ui.expander(name='report', label='Error Details', items=[
                 ui.text(
-                    f'To report this issue, <a href="{issue_link}" target="_blank">please open an issue</a> with the details below:'),
-                ui.text_l(content='Report Issue in App: **Basic Template**'),
+                    f'To report this issue, <a href="{issue_url}" target="_blank">please open an issue</a> with the details below:'),
+                ui.text_l(content=f'Report Issue in App: **{app_name}**'),
                 ui.text(content='\n'.join(dump)),
-            ]),
+            ])
         ]
     )
