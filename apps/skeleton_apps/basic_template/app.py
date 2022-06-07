@@ -1,6 +1,6 @@
 import logging
 
-from h2o_wave import Q, main, app, ui, handle_on, on
+from h2o_wave import Q, main, app, handle_on, on
 
 import cards
 
@@ -15,22 +15,22 @@ async def serve(q: Q):
     """
 
     try:
-        # Initialize the app if not already.
+        # Initialize the app if not already
         if not q.app.initialized:
             await initialize_app(q)
-            q.app.initialized = True  # Mark as initialized at the app level (global to all clients).
+            q.app.initialized = True  # Mark as initialized at the app level (global to all clients)
 
-        # Initialize the client (browser tab) if not already.
+        # Initialize the client (browser tab) if not already
         if not q.client.initialized:
             await initialize_client(q)
-            q.client.initialized = True  # Mark as initialized at the client (browser tab) level.
+            q.client.initialized = True  # Mark as initialized at the client (browser tab) level
 
-        # Delegate query to query handlers.
+        # Delegate query to query handlers
         elif await handle_on(q):
             pass
 
-        # This condition should never execute unless there is a bug in our code.
-        # Adding this condition here helps us identify those cases (instead of seeing a blank page in the browser).
+        # This condition should never execute unless there is a bug in our code
+        # Adding this condition here helps us identify those cases (instead of seeing a blank page in the browser)
         else:
             await handle_fallback(q)
 
@@ -40,42 +40,38 @@ async def serve(q: Q):
 
 async def initialize_app(q: Q):
     """
-    Initializes the app.
+    Initialize the app.
     """
 
-    # TODO: Add app-level initialization logic here (loading datasets, database connections, etc.)
     logging.info('Initializing app')
+
+    # Add app-level initialization logic here (loading datasets, database connections, etc.)
 
 
 async def initialize_client(q: Q):
     """
-    Initializes the client (browser tab).
+    Initialize the client (browser tab).
     """
 
     logging.info('Initializing client')
 
-    # Add layouts, header and footer.
+    # Add layouts, header and footer
     q.page['meta'] = cards.meta
     q.page['header'] = cards.header
     q.page['footer'] = cards.footer
 
-    # Add cards for the home page.
-    q.page['home'] = ui.form_card(
-        box='home',
-        items=[
-            ui.text('This is a great starting point to build an app.')
-        ]
-    )
+    # Add cards for the home page
+    q.page['home'] = cards.home
 
-    # TODO: Add more cards to the home page.
+    # Add more cards to the home page
 
     # Save the page
     await q.page.save()
 
 
-def drop_cards(q: Q, card_names: list):
+def clear_cards(q: Q, card_names: list):
     """
-    Drops cards from the page.
+    Clear cards from the page.
     """
 
     logging.info('Clearing cards')
@@ -91,10 +87,10 @@ async def show_error(q: Q, error: str):
 
     logging.error(error)
 
-    # Drop all cards from the page.
-    drop_cards(q, ['home'])
+    # Clear all cards from the page
+    clear_cards(q, ['home'])
 
-    # Format and display the error.
+    # Format and display the error
     q.page['error'] = cards.create_crash_report(q)
 
     await q.page.save()
@@ -103,7 +99,7 @@ async def show_error(q: Q, error: str):
 @on('reload')
 async def reload_client(q: Q):
     """
-    Resets the client (browser tab).
+    Reset the client (browser tab).
     This function is called when the user clicks "Reload" on the crash report.
     """
 
@@ -114,15 +110,12 @@ async def reload_client(q: Q):
 
 async def handle_fallback(q: Q):
     """
-    Handles fallback cases.
+    Handle fallback cases.
     This function should never get called unless there is a bug in our code or query handling logic.
     """
 
     logging.info('Adding fallback page')
 
-    q.page['fallback'] = ui.form_card(
-        box='fallback',
-        items=[ui.text('Uh-oh, something went wrong!')]
-    )
+    q.page['fallback'] = cards.fallback
 
     await q.page.save()
