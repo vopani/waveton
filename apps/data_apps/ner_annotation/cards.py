@@ -53,16 +53,6 @@ footer = ui.footer_card(
     caption=f'Learn more about <a href="{repo_url}" target="_blank"> WaveTon: 💯 Wave Applications</a>'
 )
 
-# Additional cards for the app's pages
-main = ui.form_card(
-    box='main',
-    items=[
-        ui.text('This is dark mode'),
-        ui.text('''You can read more about creating custom themes using
-            <a href="https://wave.h2o.ai/docs/examples/theme-generator" target="_blank">Theme Generator</a>''')
-    ]
-)
-
 # A fallback card for handling bugs
 fallback = ui.form_card(
     box='fallback',

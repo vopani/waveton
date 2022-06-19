@@ -20,7 +20,6 @@ meta = ui.meta_card(
             zones=[
                 ui.zone(name='header'),
                 ui.zone(name='main'),
-                ui.zone(name='error'),
                 ui.zone(name='footer')
             ]
         )
@@ -46,7 +45,7 @@ footer = ui.footer_card(
     caption=f'Learn more about <a href="{repo_url}" target="_blank"> WaveTon: 💯 Wave Applications</a>'
 )
 
-# Additional cards for the app's pages
+# Main card
 main = ui.form_card(
     box='main',
     items=[
@@ -91,7 +90,7 @@ def crash_report(q: Q) -> ui.FormCard:
         dump.append(code_block([f'{k}: {v}' for k, v in expando_to_dict(source).items()]))
 
     return ui.form_card(
-        box='error',
+        box='main',
         items=[
             ui.stats(
                 items=[

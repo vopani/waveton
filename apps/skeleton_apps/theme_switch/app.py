@@ -48,6 +48,8 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
+    q.app.cards = ['main', 'error']
+
 
 async def initialize_client(q: Q):
     """
@@ -113,7 +115,7 @@ async def show_error(q: Q, error: str):
     logging.error(error)
 
     # Clear all cards from the page
-    clear_cards(q, ['main'])
+    clear_cards(q, q.app.cards)
 
     # Format and display the error
     q.page['error'] = cards.crash_report(q)

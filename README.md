@@ -51,7 +51,7 @@ It is recommended to go through the sets in order for best experience, but you m
 
 #### Set 07 • Industry Apps
 
-#### Set 08 • H2O Apps
+#### Set 08 • Deep Learning Apps
 
 #### Set 09 • Doppelganger Apps
 
