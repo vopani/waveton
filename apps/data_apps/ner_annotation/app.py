@@ -50,6 +50,8 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
+    q.app.cards = ['ner_entities', 'ner_annotator', 'error']
+
 
 async def initialize_client(q: Q):
     """
@@ -70,6 +72,9 @@ async def initialize_client(q: Q):
     # Add layouts, header and footer
     q.page['meta'] = cards.meta
     q.page['header'] = cards.header
+    q.page['footer'] = cards.footer
+
+    # Add cards for main page
     q.page['ner_entities'] = cards.ner_entities(ner_tags=q.client.ner_tags)
     q.page['ner_annotator'] = cards.ner_annotator(
         ner_tags=q.client.ner_tags,
@@ -77,10 +82,6 @@ async def initialize_client(q: Q):
         disable_next=q.client.disable_next,
         disable_previous=q.client.disable_previous
     )
-    q.page['footer'] = cards.footer
-
-    # Add cards for the main page
-    q.page['main'] = cards.main
 
     await q.page.save()
 
@@ -256,7 +257,7 @@ async def show_error(q: Q, error: str):
     logging.error(error)
 
     # Clear all cards from the page
-    clear_cards(q, ['main'])
+    clear_cards(q, q.app.cards)
 
     # Format and display the error
     q.page['error'] = cards.crash_report(q)
