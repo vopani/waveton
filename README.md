@@ -39,7 +39,8 @@ It is recommended to go through the sets in order for best experience, but you m
 #### Set 02 • [Data Apps](https://github.com/vopani/waveton/tree/main/apps/data_apps)
 | App | Level        | Title | Description |
 | --- | ------------ | ----- | ----------- |
-| 1   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/ner_annotation) | Annotate entities for Named-Entity Recognition tasks |
+| 1   | Beginner     | [Datatable Playground](https://github.com/vopani/waveton/tree/main/apps/data_apps/datatable_playground) | Explore Python Datatable with tabular datasets |
+| 2   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/ner_annotation) | Annotate entities for Named-Entity Recognition tasks |
 
 #### Set 03 • Analysis Apps
 
