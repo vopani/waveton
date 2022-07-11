@@ -33,7 +33,7 @@ git clone https://github.com/vopani/waveton.git
 3. Create a virtual environment
 
 ```bash
-cd waveton/applications/data_apps/datatable_playground
+cd waveton/apps/data_apps/datatable_playground
 python3 -m venv venv
 source venv/bin/activate
 ```

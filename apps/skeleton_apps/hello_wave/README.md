@@ -33,7 +33,7 @@ git clone https://github.com/vopani/waveton.git
 3. Create a virtual environment
 
 ```bash
-cd waveton/applications/skeleton_apps/hello_wave
+cd waveton/apps/skeleton_apps/hello_wave
 python3 -m venv venv
 source venv/bin/activate
 ```
