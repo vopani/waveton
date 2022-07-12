@@ -43,7 +43,7 @@ meta = ui.meta_card(
 header = ui.header_card(
     box='header',
     title='Automatic Speech Recognition',
-    subtitle='Speech to text in English',
+    subtitle='Speech to text in English using Wav2Vec model',
     icon='Microphone',
     icon_color='black',
     items=[ui.toggle(name='theme_dark', label='Dark Mode', value=True, trigger=True)]
@@ -76,6 +76,7 @@ def asr(recording: bool = False, audio_path: str = None, transcription: str = ''
         items=[
             ui.separator(label='Microphone'),
             ui.buttons(items=[ui.button(name=button_name, label=button_label, primary=True)], justify='center'),
+            ui.progress(label='Recording...', caption='', visible=recording),
             ui.separator(label='Audio', visible=visible),
             ui.text(
                 content=f'''<center>
