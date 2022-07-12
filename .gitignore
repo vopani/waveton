@@ -133,3 +133,6 @@ dmypy.json
 
 # IntelliJ
 .idea/
+
+# Apps
+*sound.wav

@@ -52,7 +52,10 @@ It is recommended to go through the sets in order for best experience, but you m
 
 #### Set 07 • Industry Apps
 
-#### Set 08 • Deep Learning Apps
+#### Set 08 • [Deep Learning Apps](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps)
+| App | Level        | Title | Description |
+| --- | ------------ | ----- | ----------- |
+| 1   | Expert       | [Automatic Speech Recognition](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/automatic_speech_recognition) | Speech to text in English |
 
 #### Set 09 • Doppelganger Apps
 
