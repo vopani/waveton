@@ -13,7 +13,7 @@
 </div>
 
 ## Automatic Speech Recognition 🖥️
-Speech to text in English.
+Speech to text in English using Wav2Vec model.
 
 ![](demo.gif)
 

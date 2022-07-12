@@ -17,4 +17,4 @@ Applications that showcase deep learning based solutions.
 
 | App | Level        | Title | Description |
 | --- | ------------ | ----- | ----------- |
-| 1   | Expert       | [Automatic Speech Recognition](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/automatic_speech_recognition) | Speech to text in English |
+| 1   | Expert       | [Automatic Speech Recognition](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/automatic_speech_recognition) | Speech to text in English using Wav2Vec model |
