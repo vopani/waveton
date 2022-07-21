@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import re
+import cv2
 
 import numpy as np
 import torch
@@ -46,9 +47,15 @@ def stylize(style_model, content_image, output_image):
         transforms.Lambda(lambda x: x.mul(255))
     ])
     content_image = content_transform(content_image)
+    if len(content_image.shape) > 2 and content_image.shape[0] == 4:
+        #convert the image from RGBA2RGB
+        content_image = content_image[:3,:,:]
     content_image = content_image.unsqueeze(0).to(device)
 
+    
+
     with torch.no_grad():
+        print(content_image.shape)
         output = style_model(content_image).cpu()
 
     save_image(output_image, output[0])

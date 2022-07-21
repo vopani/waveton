@@ -70,13 +70,13 @@ async def serve(q: Q):
                     q.user.input_image = input_image = "static/" + img
             else:
                 q.user.input_image = input_image = "static/" + img
-            style_name = q.args.style_model
-
+            style_name = q.user.style_model
+            print(style_name)
             model = "saved_models/" + style_name + ".pth"
             q.user.output_image = output_image = "generated/" + style_name + "-" + img
             model = load_model(model)     
             stylize(model, input_image, output_image)
-            q.user.style_name = q.args.style_model
+            q.user.style_name = q.user.style_model
             q.user.apply_style = q.args.apply_style
             q.args.tabs = 'dashboard_tab'
         if q.user.apply_style:
