@@ -16,7 +16,7 @@
 
 Building blocks to kickstart an app.
 
-![]([demo.mp4](https://github.com/pira998/waveton/blob/de4e4d67a0dab48994fef6925eb9c88efa8f71d7/apps/deeplearning_apps/style_transfer/Images/demo.mp4))
+https://github.com/pira998/waveton/blob/de4e4d67a0dab48994fef6925eb9c88efa8f71d7/apps/deeplearning_apps/style_transfer/Images/demo.mp4
 
 ## Setup ⚙️
 
