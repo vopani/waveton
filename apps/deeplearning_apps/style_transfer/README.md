@@ -1,44 +1,56 @@
-<h1 align="center" id="title">Style Transfer Wave App</h1>
+<div align='center'>
 
-<p align="center"><img src="https://socialify.git.ci/pira998/style_transfer_wave_app/image?font=Raleway&amp;forks=1&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Brick%20Wall&amp;stargazers=1&amp;theme=Dark" alt="project-image"></p>
+<h1>WaveTon</h1>
+💯 Wave applications
 
-<p id="description">Using VGG16 Transfer the Learnt Style parameter from Style Image to Source Image</p>
+<br>
+<br>
 
-<h2>🚀 Demo</h2>
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?logo=apache)](https://github.com/vopani/waveton/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/stars/vopani/waveton?color=yellowgreen&logo=github)](https://img.shields.io/github/stars/vopani/waveton?color=yellowgreen&logo=github)
+[![Twitter](https://img.shields.io/twitter/follow/vopani)](https://twitter.com/vopani)
 
-https://user-images.githubusercontent.com/46839677/170808131-74508032-2830-431c-ba5b-01ddb8014ac8.mov
+</div>
 
+## Style Transfer App 🖥️
 
-<h2>Project Screenshots:</h2>
+Building blocks to kickstart an app.
 
-<img src="https://github.com/pira998/style_transfer_wave_app/blob/main/Images/Screenshot%202022-05-28%20at%2008.15.47.png" alt="project-screenshot">
+![](demo.mp4)
 
-<img src="https://github.com/pira998/style_transfer_wave_app/blob/main/Images/Screenshot%202022-05-28%20at%2008.16.15.png" alt="project-screenshot">
+## Setup ⚙️
 
-<h2>🛠️ Installation Steps:</h2>
+1. Check the version of Python, must be Python 3.7+ but recommended to use Python 3.10+ for best experience
 
-<p>1. Setup Your Python Environment</p>
-
-```
-python3 -m venv venv 
-```
-
-```
-source venv/bin/activate $ pip3 install -r requirements.txt
-```
-
-```
-pip3 install -r requirements.txt
+```bash
+python3 --version
 ```
 
-<p>2. Run the App</p>
+2. Clone the repository
 
-```
-wave run src.app
+```bash
+git clone https://github.com/vopani/waveton.git
 ```
 
-<p>3. View the App</p>
+3. Create a virtual environment
 
+```bash
+cd waveton/apps/deeplearning-apps/style-transfer
+python3 -m venv venv
+source venv/bin/activate
 ```
-Point your favorite web browser to localhost:10101
+
+4. Install the packages
+
+```bash
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements.txt
 ```
+
+5. Run the application
+
+```bash
+wave run app
+```
+
+6. View the application on your local browser: [http://localhost:10101](http://localhost:10101)

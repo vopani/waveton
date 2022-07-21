@@ -1,10 +1,10 @@
 import sys
 import traceback
-
+from html_content import html
 from h2o_wave import Q, expando_to_dict, ui
 
 # App name
-app_name = 'Basic Template'
+app_name = 'Style Transfer App'
 
 # Link to repo. Report bugs/features here :)
 repo_url = 'https://github.com/vopani/waveton'
@@ -57,6 +57,49 @@ fallback = ui.form_card(
     items=[ui.text('Uh-oh, something went wrong!')]
 )
 
+def create_choice_list(items):
+    return [ui.choice(name=k, label=k) for k in items]
+
+async def create_dashboard(q,models_choice, source_image_choice):
+    models = create_choice_list(models_choice)
+    sources = create_choice_list(source_image_choice)
+    image_form = [ui.button(name='try_your_image', label='Try Existing Image' if q.user.try_your_image else 'Try Your Image')]
+    if q.user.try_your_image:
+        image_form = image_form + [ui.file_upload(
+            name='upload_image', label='Upload your image', compact=True),]
+    else:
+        image_form = image_form + [
+			ui.dropdown(trigger = True, popup='always', name = 'source_img', label = 'Source Image', value =q.args.source_img or source_image_choice[0], choices=sources),
+		]
+    image_form = image_form + [
+		ui.dropdown(trigger = True, name='style_model', label='Style Model',
+		            value=q.args.style_model or models_choice[0], choices=models),
+        ui.button(name='apply_style', label="Apply Style"),
+        ui.expander(name='preview', expanded=True, label='Style Preview', items=[
+			ui.text("<img src='"+ q.user.template_image_path+"' width='99%' >")
+		]),
+	]
+	# BASE_URL = 'https://mystique-transfer-learning.herokuapp.com'
+    BASE_URL = 'http://localhost:10101'
+    local_path_color, = await q.site.upload([q.user.input_image])
+    local_path_bw, = await q.site.upload([q.user.output_image if q.user.apply_style else q.user.input_image])
+    image_slider_html = html
+
+    image_slider_html = image_slider_html.format(
+		color=BASE_URL + local_path_color, bw=BASE_URL + local_path_bw)
+    cfg = {
+            'tag': 'dashboard',
+			'image_form': image_form,
+			'image_slider_html': image_slider_html
+    }
+    return cfg
+
+async def render_template(q: Q, page_cfg):
+    q.page['main_left'] = ui.form_card(box=ui.box(
+        zone='main', width='20%', order=1), title='', items=page_cfg['image_form'])
+    q.page['main_right'] = ui.frame_card(box=ui.box(
+            zone='main', width='80%', order=2), title='', content=page_cfg['image_slider_html'])
+    await q.page.save()
 
 def crash_report(q: Q) -> ui.FormCard:
     """

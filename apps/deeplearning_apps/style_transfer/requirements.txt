@@ -3,5 +3,5 @@ matplotlib==3.5.1
 plotly==5.6.0
 pandas==1.2.1
 numpy==1.19.5
-torch
-torchvision
+torch==1.11.0
+torchvision==0.12.0
