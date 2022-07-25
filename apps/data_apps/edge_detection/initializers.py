@@ -9,7 +9,7 @@ from wave_utils import load_sample_images
 
 async def initialize_app(q: Q):
     """
-    Initializing app.
+    Initializing the app.
     """
     if q.app.app_initialized:
         return
@@ -30,7 +30,7 @@ async def initialize_app(q: Q):
 
 async def initialize_client(q: Q):
     """
-    Initializing client.
+    Initializing client (browser tab).
     """
     if q.client.client_initialized:
         if q.args.theme_dark is not None and q.args.theme_dark != q.client.theme_dark:
@@ -53,3 +53,4 @@ async def initialize_client(q: Q):
 
     await setup_home(q)
     await q.page.save()
+

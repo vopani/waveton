@@ -1,4 +1,4 @@
-from h2o_wave import Q, expando_to_dict
+from h2o_wave import Q
 
 import cards
 from constants import DEFAULT_LOGGER, DROPPABLE_CARDS
@@ -57,21 +57,18 @@ async def drop_cards(q: Q, card_names: list):
         del q.page[card_name]
 
 
-async def handle_error(q: Q, error: str):
+async def show_error(q: Q, error: str):
     """
-    Handle any app error.
+    Displays errors.
     """
 
     DEFAULT_LOGGER.error(error)
 
+    # Drop all cards from the page.
     await drop_cards(q, DROPPABLE_CARDS)
 
-    q.page['error'] = cards.error(
-        q_app=expando_to_dict(q.app),
-        q_user=expando_to_dict(q.user),
-        q_client=expando_to_dict(q.client),
-        q_events=expando_to_dict(q.events),
-        q_args=expando_to_dict(q.args)
-    )
+    # Format and display the error.
+    q.page['error'] = cards.create_crash_report(q)
 
     await q.page.save()
+
