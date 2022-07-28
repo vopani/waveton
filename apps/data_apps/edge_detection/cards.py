@@ -1,12 +1,10 @@
 import sys
 import traceback
 
-import pandas as pd
-
 from h2o_wave import Q, ui, expando_to_dict
 
 import layouts
-from constants import EdgeDetectionKernels
+from constants import EdgeDetectionKernels, DEFAULT_EDGE_DETECTION_KERNEL, DEFAULT_BLUR_KERNEL_SIZE, DEFAULT_EDGE_DETECTION_KERNEL_SIZE
 
 
 # Link to repo. Report bugs/features here :)
@@ -115,7 +113,7 @@ def footer() -> ui.FooterCard:
     return card
 
 
-def command_panel(edge_detection_kernel, gaussian_blur, gaussian_kernel_size) -> ui.FormCard:
+def command_panel(edge_detection_kernel=None, edge_detection_kernel_size=None, gaussian_kernel_size=None) -> ui.FormCard:
     """
     Card for control panel.
     """
@@ -134,50 +132,92 @@ def command_panel(edge_detection_kernel, gaussian_blur, gaussian_kernel_size) ->
     return ui.form_card(
         box='commands',
         items=[
-            ui.text_xl("Command Panel"),
-            ui.file_upload(
-                name="image_uploader",
-                label="Upload",
-                multiple=False,
-                file_extensions=['jpeg', 'png'],
-            ),
-            ui.separator(),
-            ui.text_xl("Kernel Configurations"),
-            ui.choice_group(
-                name="edge_detection_kernel",
-                label="Select Kernel",
-                choices=kernel_choices,
-                value=edge_detection_kernel
-            ),
-            ui.separator(),
-            ui.text_xl("Blur Configurations"),
-            ui.checkbox(
-                name="gaussian_blur",
-                label="Apply Gaussian Blur for Smoothing",
-                value=gaussian_blur,
-            ),
-            ui.text_xl("\n"),
-            ui.slider(
-                name="gaussian_kernel_size",
-                label="Blur Kernel Size",
-                min=3,
-                max=21,
-                step=2,
-                value=gaussian_kernel_size
-            ),
-            ui.text_xl("\n"),
-            ui.buttons(
+            ui.inline(
                 items=[
-                    ui.button(
-                        name="run_edge_detection",
-                        label="Detect",
-                        primary=True,
-                        icon="Search"
-                    )
-                ]
-            )
-
+                    ui.dropdown(
+                        name="edge_detection_kernel",
+                        label="Kernel Selector",
+                        choices=kernel_choices,
+                        value=edge_detection_kernel or DEFAULT_EDGE_DETECTION_KERNEL,
+                        width='30%',
+                        trigger=True
+                    ),
+                    ui.slider(
+                        name="edge_detection_kernel_size",
+                        label="Edge Detection Kernel Size",
+                        min=1,
+                        max=21,
+                        step=2,
+                        value=edge_detection_kernel_size or DEFAULT_EDGE_DETECTION_KERNEL_SIZE,
+                        width='30%',
+                        trigger=True
+                    ),
+                    ui.slider(
+                        name="gaussian_kernel_size",
+                        label="Apply Gaussian Blur for Smoothing (Gaussian Kernel Size)",
+                        min=1,
+                        max=21,
+                        step=2,
+                        value=gaussian_kernel_size or DEFAULT_BLUR_KERNEL_SIZE,
+                        width='30%',
+                        trigger=True
+                    ),
+                ],
+                justify=ui.InlineJustify.BETWEEN
+            ),
         ],
+    )
+
+
+def image_uploader():
+    """
+    Image uploader card.
+    """
+    return ui.FormCard(
+        box="main_bottom_left",
+        items=[
+            ui.inline(
+                items=[
+                    ui.file_upload(
+                        name="image_uploader",
+                        label="",
+                        multiple=False,
+                        file_extensions=['jpeg', 'png', 'jpg'],
+                        compact=True,
+                        width='95%'
+                    ),
+                    ui.button(
+                        name='upload_image',
+                        label='Upload',
+                        primary=True,
+                    )
+                ],
+                justify=ui.InlineJustify.START
+            )
+        ]
+    )
+
+
+def image_downloader(image_path):
+    """
+    Image downloader card.
+    """
+    return ui.form_card(
+        box='main_bottom_right',
+        items=[
+            ui.inline(
+                items=[
+                    ui.link(
+                        name='download_processed_image',
+                        label='Download',
+                        download=True,
+                        button=True,
+                        path=image_path,
+                    )
+                ],
+                justify=ui.InlineJustify.END
+            )
+        ]
     )
 
 
@@ -202,43 +242,3 @@ def processed_image_viewer(image_path) -> ui.ImageCard:
         path=image_path
     )
 
-
-def image_table(image_df: pd.DataFrame) -> ui.FormCard:
-    """
-    Card to display uploaded image table.
-    """
-    columns = [
-        ui.table_column(
-            name="image_name",
-            label="Image",
-            sortable=True,
-            searchable=True,
-            link=True,
-            max_width="750px"
-        ),
-        ui.table_column(
-            name="uploaded_time",
-            label="Uploaded At",
-            sortable=True,
-        )
-    ]
-
-    rows = [
-        ui.table_row(
-            name=row.Image,
-            cells=[row.Image, row.Timestamp]
-        ) for row in image_df.itertuples()
-    ]
-
-    table = ui.table(
-        name="image_table",
-        columns=columns,
-        rows=rows,
-        height='calc(((100vh - 150px)/3) - 75px)'
-    )
-    return ui.form_card(
-        box='main_bottom',
-        items=[
-            table
-        ]
-    )

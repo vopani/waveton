@@ -3,10 +3,10 @@ import os.path
 from h2o_wave import Q, on
 
 import cards
-from actions import drop_cards
-from constants import DROPPABLE_CARDS, DEFAULT_LOGGER
+from actions import drop_cards, edge_detection_process
+from constants import DROPPABLE_CARDS, DEFAULT_LOGGER, DEFAULT_EDGE_DETECTION_KERNEL_SIZE, DEFAULT_BLUR_KERNEL_SIZE, DEFAULT_EDGE_DETECTION_KERNEL
 from initializers import initialize_client
-from utils import update_image_df, apply_edge_detection
+from utils import apply_edge_detection
 
 
 @on('restart')
@@ -45,61 +45,32 @@ async def report(q: Q):
 
 
 @on()
-async def image_uploader(q: Q):
+async def upload_image(q: Q):
     """
     Upload new image.
     """
     DEFAULT_LOGGER.info('Uploading new image')
 
-    q.app.image_df = update_image_df(q.app.image_df, q.args.image_uploader[0])
-    q.page['image_table'] = cards.image_table(q.app.image_df)
-    await q.page.save()
-
-
-@on()
-async def image_table(q: Q):
-    """
-    Load selected image to image viewers.
-    """
-    DEFAULT_LOGGER.info(f'Loading {q.args.image_table[0]} to image viewer')
-
-    q.client.selected_image = q.args.image_table[0]
-    q.client.selected_processed_image = None
+    q.client.selected_image = q.args.image_uploader[0]
 
     # download image to local directory to process it using opencv
     q.client.selected_image_local_copy = await q.site.download(
-        q.args.image_table[0],
-        os.path.join(q.app.images_dir, os.path.basename(q.args.image_table[0]))
+        q.client.selected_image,
+        os.path.join(q.app.images_dir, os.path.basename(q.client.selected_image))
     )
 
-    q.page['original_image_viewer'] = cards.original_image_viewer(q.client.selected_image)
-    q.page['processed_image_viewer'] = cards.processed_image_viewer(q.client.selected_processed_image)
+    q.client.edge_detection_kernel = DEFAULT_EDGE_DETECTION_KERNEL
+    q.client.edge_detection_kernel_size = DEFAULT_EDGE_DETECTION_KERNEL_SIZE
+    q.client.gaussian_kernel_size = DEFAULT_BLUR_KERNEL_SIZE
 
     await q.page.save()
 
-
-@on()
-async def run_edge_detection(q: Q):
-    """
-    Apply edge detection on selected image.
-    """
-    DEFAULT_LOGGER.info("Applying edge detection")
-
-    if q.args.edge_detection_kernel:
-        q.client.edge_detection_kernel = q.args.edge_detection_kernel
-
-    if q.args.gaussian_blur:
-        q.client.gaussian_blur = q.args.gaussian_blur
-
-    if q.args.gaussian_kernel_size:
-        q.client.gaussian_kernel_size = q.args.gaussian_kernel_size
-
-    print(q.client.selected_image_local_copy)
     processed_image = apply_edge_detection(
         [q.client.selected_image_local_copy],
         processed_folder=q.app.processed_dir,
         edge_detection_kernel=q.client.edge_detection_kernel,
-        smoothing=q.client.gaussian_blur,
+        edge_detection_kernel_size=q.client.edge_detection_kernel_size,
+        smoothing=True,
         smoothing_kernel_size=q.client.gaussian_kernel_size
     )
 
@@ -109,9 +80,28 @@ async def run_edge_detection(q: Q):
 
     q.client.selected_processed_image = uploaded[0]
 
-    q.app.image_df.loc[
-        q.app.image_df.Image == q.client.selected_image, "Processed_Image"
-    ] = q.client.selected_processed_image
+    q.page['commands_panel'] = cards.command_panel(
+        edge_detection_kernel=q.client.edge_detection_kernel,
+        edge_detection_kernel_size=q.client.edge_detection_kernel_size,
+        gaussian_kernel_size=q.client.gaussian_kernel_size
+    )
 
+    q.page['original_image_viewer'] = cards.original_image_viewer(q.client.selected_image)
     q.page['processed_image_viewer'] = cards.processed_image_viewer(q.client.selected_processed_image)
+    q.page['image_downloader'] = cards.image_downloader(q.client.selected_processed_image)
+
     await q.page.save()
+
+
+@on()
+async def edge_detection_kernel(q: Q):
+    """
+    Detect changes in edge detection configuration and apply them.
+    """
+    if q.args.upload_image and q.args.image_uploader:
+        await upload_image(q)
+    elif q.client.edge_detection_kernel != q.args.edge_detection_kernel or q.client.edge_detection_kernel_size != q.args.edge_detection_kernel_size or q.client.gaussian_kernel_size != q.args.gaussian_kernel_size:
+        DEFAULT_LOGGER.info("Detected change in edge detection settings")
+        await edge_detection_process(q)
+    else:
+        await q.page.save()

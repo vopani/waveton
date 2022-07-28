@@ -22,8 +22,13 @@ class EdgeDetectionKernels(Enum):
 
 DROPPABLE_CARDS = [
     'error',
-    'commands_panel',
+    'command_panel',
     'original_image_viewer',
     'processed_image_viewer',
-    'image_table'
+    'image_uploader',
+    'image_downloader'
 ]
+
+DEFAULT_EDGE_DETECTION_KERNEL = EdgeDetectionKernels.SOBEL.value
+DEFAULT_EDGE_DETECTION_KERNEL_SIZE = 3
+DEFAULT_BLUR_KERNEL_SIZE = 3
