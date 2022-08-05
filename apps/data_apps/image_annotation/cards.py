@@ -23,7 +23,7 @@ meta = ui.meta_card(
                     size='calc(100vh - 150px)',
                     direction='row',
                     zones=[
-                        ui.zone(name='image_entities', size='20%'),
+                        ui.zone(name='image_classes', size='20%'),
                         ui.zone(name='image_annotator', size='70%'),
                     ]
                 ),
@@ -39,7 +39,7 @@ meta = ui.meta_card(
 header = ui.header_card(
     box='header',
     title='Image Annotation ',
-    subtitle='Annotate Images with Bounding Boxes Object Detection tasks',
+    subtitle='Annotate images for computer vision tasks',
     icon='Handwriting',
     icon_color='black',
     items=[
@@ -60,18 +60,19 @@ fallback = ui.form_card(
 )
 
 
-def image_annotator_item(x1,y1,x2,y2,tag):
-    return ui.image_annotator_item(shape=ui.image_annotator_rect(x1=x1,y1=y1,x2=x2,y2=y2),tag=tag)
+def image_annotator_item(x1, y1, x2, y2, tag):
+    return ui.image_annotator_item(shape=ui.image_annotator_rect(x1=x1, y1=y1, x2=x2, y2=y2), tag=tag)
 
-def image_entities(image_tags) -> ui.FormCard:
+
+def image_classes(image_tags: list[dict]) -> ui.FormCard:
     """
-    Card for Image entities.
+    Card for image classes.
     """
 
     card = ui.form_card(
-        box='image_entities',
+        box='image_classes',
         items=[
-            ui.textbox(name='add_new_class', label='Add New Class'),
+            ui.textbox(name='new_class_name', label='Type a new class to be added'),
             ui.buttons(
                 items=[
                     ui.button(name='add', label='Add', primary=True)
@@ -80,8 +81,8 @@ def image_entities(image_tags) -> ui.FormCard:
             ),
             ui.separator(),
             ui.dropdown(
-                name='delete_existing_class',
-                label='Delete Existing Class',
+                name='delete_class_name',
+                label='Select a class to delete',
                 choices=[ui.choice(name=tag['name'], label=tag['label']) for tag in image_tags]
             ),
             ui.buttons(
@@ -89,26 +90,11 @@ def image_entities(image_tags) -> ui.FormCard:
                     ui.button(name='delete', label='Delete', primary=True)
                 ],
                 justify='center'
-            ),
-
-            ui.separator(),
-
-            ui.textbox(name='new_pixel_size', label='New Image Size [Integer]', suffix='px'),
-            ui.buttons(
-                items=[
-                    ui.button(name='change_pixel', label='Change Size', primary=True)
-                ],
-                justify='center'
-            ),
-
-            ui.file_upload(name='file_upload', label='Click to Upload Custom Image!!', multiple=True,
-                           file_extensions=['png', 'jpg']),
-
+            )
         ]
     )
 
     return card
-
 
 
 def image_annotator(
@@ -118,33 +104,31 @@ def image_annotator(
     image_pixels,
 ) -> ui.FormCard:
     """
-    Card for IMAGE annotator.
+    Card for Image Annotator.
     """
 
     card = ui.form_card(
         box='image_annotator',
-
         items=[
             ui.image_annotator(
                 name='annotator',
-                title='Drag to annotate',
+                title='Create boxes to annotate',
                 image=[images][0],
                 items=[image_items][0],
                 image_height=image_pixels,
-                tags= [ui.image_annotator_tag(**tag) for tag in image_tags],
+                tags=[ui.image_annotator_tag(**tag) for tag in image_tags]
             ),
-
             ui.buttons(
                 items=[
-                    ui.button(name='save_output', label='Download Output JSON File', primary=True,),
-                ]
-            ),
-
+                    ui.button(name='upload', label='Upload', primary=True),
+                    ui.button(name='download', label='Download', primary=True)
+                ],
+                justify='center'
+            )
         ]
     )
 
     return card
-
 
 
 def crash_report(q: Q) -> ui.FormCard:

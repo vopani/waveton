@@ -5,8 +5,10 @@ from h2o_wave import Q, main, app, copy_expando, handle_on, on, site
 
 import cards
 import constants
+
 # Set up logging
 logging.basicConfig(format='%(levelname)s:\t[%(asctime)s]\t%(message)s', level=logging.INFO)
+
 
 @app('/')
 async def serve(q: Q):
@@ -48,7 +50,7 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
-    q.app.cards = ['image_entities', 'image_annotator', 'error']
+    q.app.cards = ['image_classes', 'image_annotator', 'error']
 
 
 async def initialize_client(q: Q):
@@ -61,8 +63,8 @@ async def initialize_client(q: Q):
     # Set initial argument values
     q.client.theme_dark = True
 
-    q.client.image_tags = constants.IMAGE_TAGS
     q.client.image_data = constants.IMAGES
+    q.client.image_tags = constants.IMAGE_TAGS
     q.client.image_items = constants.IMAGE_ITEMS
     q.client.image_pixel = constants.IMAGE_PIXEL
     q.client.image_index = 0
@@ -73,13 +75,12 @@ async def initialize_client(q: Q):
     q.page['footer'] = cards.footer
 
     # Add cards for main page
-    q.page['image_entities'] = cards.image_entities(image_tags=q.client.image_tags)
-
+    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
     q.page['image_annotator'] = cards.image_annotator(
         image_tags=q.client.image_tags,
-        image_items= q.client.image_items,
+        image_items=q.client.image_items,
         images=q.client.image_data[q.client.image_index],
-        image_pixels = q.client.image_pixel
+        image_pixels=q.client.image_pixel
     )
 
     await q.page.save()
@@ -109,11 +110,10 @@ async def update_theme(q: Q):
     await q.page.save()
 
 
-
 @on('add')
-async def add_entity(q: Q):
+async def add_class(q: Q):
     """
-    Add a new entity to Image Classes.
+    Add a new class to Image Classes.
     """
 
     logging.info('Adding a new class')
@@ -122,16 +122,16 @@ async def add_entity(q: Q):
     copy_expando(q.args, q.client)
 
     old_annotation = []
-    for en,cnxt in enumerate(q.client.annotator):
+    for en, cnxt in enumerate(q.client.annotator):
         x1 = cnxt['shape']['rect']['x1']
         y1 = cnxt['shape']['rect']['y1']
         x2 = cnxt['shape']['rect']['x2']
         y2 = cnxt['shape']['rect']['y2']
-        old_annotation.append(cards.image_annotator_item(x1,y1,x2,y2,tag=cnxt['tag']))
+        old_annotation.append(cards.image_annotator_item(x1, y1, x2, y2, tag=cnxt['tag']))
 
     q.client.image_items = old_annotation
 
-    # Add new entity
+    # Add new class
     if len(q.client.add_new_class) > 0:
         q.client.image_tags.append({
             'name': q.client.add_new_class.lower(),
@@ -139,17 +139,18 @@ async def add_entity(q: Q):
             'color': '#{:02x}{:02x}{:02x}'.format(randint(0, 255), randint(0, 255), randint(0, 255))
         })
 
-    # Refresh data with new entity
-    q.page['image_entities'] = cards.image_entities(image_tags=q.client.image_tags)
+    # Refresh data with new class
+    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
     q.page['image_annotator'] = cards.image_annotator(
         image_tags=q.client.image_tags,
-        image_items= q.client.image_items,
+        image_items=q.client.image_items,
         images=q.client.image_data[q.client.image_index],
         image_pixels=q.client.image_pixel
 
     )
 
     await q.page.save()
+
 
 @on('file_upload')
 async def add_image(q: Q):
@@ -165,11 +166,50 @@ async def add_image(q: Q):
 
     q.client.image_data[q.client.image_index] = q.client.file_upload[0]
 
-    # Refresh data with new entity
-    q.page['image_entities'] = cards.image_entities(image_tags=q.client.image_tags)
+    # Refresh data with new class
+    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
     q.page['image_annotator'] = cards.image_annotator(
         image_tags=q.client.image_tags,
-        image_items= q.client.image_items,
+        image_items=q.client.image_items,
+        images=q.client.image_data[q.client.image_index],
+        image_pixels=q.client.image_pixel
+
+    )
+
+    await q.page.save()
+
+
+@on('delete')
+async def delete_class(q: Q):
+
+    logging.info('Deleting a class')
+
+    # Save annotation
+    copy_expando(q.args, q.client)
+
+    old_annotation = []
+    for en, cnxt in enumerate(q.client.annotator):
+        if cnxt['tag'] == q.client.delete_existing_class:
+            logging.info('skipping this class')
+            continue
+        x1 = cnxt['shape']['rect']['x1']
+        y1 = cnxt['shape']['rect']['y1']
+        x2 = cnxt['shape']['rect']['x2']
+        y2 = cnxt['shape']['rect']['y2']
+        old_annotation.append(cards.image_annotator_item(x1, y1, x2, y2, tag=cnxt['tag']))
+
+    q.client.image_items = old_annotation
+
+    if len(q.client.image_tags) > 1:
+        q.client.image_tags = [tag for tag in q.client.image_tags if tag['name'] != q.client.delete_existing_class]
+    else:
+        logging.info('Please have at least one class!!')
+
+    # Refresh data with remaining classes
+    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
+    q.page['image_annotator'] = cards.image_annotator(
+        image_tags=q.client.image_tags,
+        image_items=q.client.image_items,
         images=q.client.image_data[q.client.image_index],
         image_pixels=q.client.image_pixel
 
@@ -188,11 +228,11 @@ async def add_image(q: Q):
 
     q.client.image_pixel = q.client.new_pixel_size
 
-    # Refresh data with new entity
-    q.page['image_entities'] = cards.image_entities(image_tags=q.client.image_tags)
+    # Refresh data with new class
+    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
     q.page['image_annotator'] = cards.image_annotator(
         image_tags=q.client.image_tags,
-        image_items= [],
+        image_items=[],
         images=q.client.image_data[q.client.image_index],
         image_pixels=q.client.image_pixel
 
@@ -201,50 +241,13 @@ async def add_image(q: Q):
     await q.page.save()
 
 
+@on('download')
+async def download(q: Q):
+    """
+    Download annotated image as json.
+    """
 
-@on('delete')
-async def delete_entity(q: Q):
-
-
-    logging.info('Deleting an entity')
-
-    # Save annotation
-    copy_expando(q.args, q.client)
-
-    old_annotation = []
-    for en,cnxt in enumerate(q.client.annotator):
-        if cnxt['tag'] == q.client.delete_existing_class:
-            logging.info('skipping this class')
-            continue
-        x1 = cnxt['shape']['rect']['x1']
-        y1 = cnxt['shape']['rect']['y1']
-        x2 = cnxt['shape']['rect']['x2']
-        y2 = cnxt['shape']['rect']['y2']
-        old_annotation.append(cards.image_annotator_item(x1,y1,x2,y2,tag=cnxt['tag']))
-
-    q.client.image_items = old_annotation
-
-    if len(q.client.image_tags) > 1:
-        q.client.image_tags = [tag for tag in q.client.image_tags if tag['name'] != q.client.delete_existing_class]
-    else:
-        logging.info('Please have at least one class!!')
-
-    # Refresh data with remaining entities
-    q.page['image_entities'] = cards.image_entities(image_tags=q.client.image_tags)
-    q.page['image_annotator'] = cards.image_annotator(
-        image_tags=q.client.image_tags,
-        image_items= q.client.image_items,
-        images=q.client.image_data[q.client.image_index],
-        image_pixels=q.client.image_pixel
-
-    )
-
-    await q.page.save()
-
-@on('save_output')
-async def save_output(q: Q):
-
-    logging.info('Downloading the Annotations in JSON')
+    logging.info('Downloading annotations in JSON')
 
     # Save annotation
     copy_expando(q.args, q.client)
@@ -254,25 +257,23 @@ async def save_output(q: Q):
     final = open(filename, "w")
 
     with final as output_file:
-        json.dump(annotation_list,output_file)
-
+        json.dump(annotation_list, output_file)
 
     download_path = await q.site.upload([filename])
 
     q.page['meta'].redirect = download_path
 
-
     old_annotation = []
-    for en,cnxt in enumerate(q.client.annotator):
+    for en, cnxt in enumerate(q.client.annotator):
         x1 = cnxt['shape']['rect']['x1']
         y1 = cnxt['shape']['rect']['y1']
         x2 = cnxt['shape']['rect']['x2']
         y2 = cnxt['shape']['rect']['y2']
-        old_annotation.append(cards.image_annotator_item(x1,y1,x2,y2,tag=cnxt['tag']))
+        old_annotation.append(cards.image_annotator_item(x1, y1, x2, y2, tag=cnxt['tag']))
 
     q.client.image_items = old_annotation
 
-    # Add new entity
+    # Add new class
     if len(q.client.add_new_class) > 0:
         q.client.image_tags.append({
             'name': q.client.add_new_class.lower(),
@@ -280,8 +281,8 @@ async def save_output(q: Q):
             'color': '#{:02x}{:02x}{:02x}'.format(randint(0, 255), randint(0, 255), randint(0, 255))
         })
 
-    # Refresh data with new entity
-    q.page['image_entities'] = cards.image_entities(image_tags=q.client.image_tags)
+    # Refresh data with new class
+    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
     q.page['image_annotator'] = cards.image_annotator(
         image_tags=q.client.image_tags,
         image_items= q.client.image_items,
@@ -290,8 +291,6 @@ async def save_output(q: Q):
 
     )
     await q.page.save()
-
-
 
 
 def clear_cards(q: Q, card_names: list):
