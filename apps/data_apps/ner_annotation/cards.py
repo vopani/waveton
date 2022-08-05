@@ -68,7 +68,7 @@ def ner_entities(ner_tags: list[dict]) -> ui.FormCard:
     card = ui.form_card(
         box='ner_entities',
         items=[
-            ui.textbox(name='new_entity_name', label='Type an entity to be added'),
+            ui.textbox(name='new_entity_name', label='Type a new entity to be added'),
             ui.buttons(
                 items=[
                     ui.button(name='add', label='Add', primary=True)
@@ -86,7 +86,7 @@ def ner_entities(ner_tags: list[dict]) -> ui.FormCard:
                     ui.button(name='delete', label='Delete', primary=True)
                 ],
                 justify='center'
-            ),
+            )
         ]
     )
 
