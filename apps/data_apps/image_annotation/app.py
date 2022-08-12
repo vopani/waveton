@@ -1,7 +1,7 @@
 import logging
 from random import randint
 import json
-from h2o_wave import Q, main, app, copy_expando, handle_on, on, site
+from h2o_wave import Q, main, app, copy_expando, handle_on, on
 
 import cards
 import constants
