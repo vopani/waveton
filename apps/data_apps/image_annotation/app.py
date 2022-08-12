@@ -32,7 +32,7 @@ async def serve(q: Q):
             await update_theme(q)
 
         # Update image if resized
-        elif q.args.resize_height != '' and q.args.resize_height != q.client.resize_height:
+        elif q.args.resize_height not in [None, ''] and q.args.resize_height != q.client.resize_height:
             await resize_image(q)
 
         # Delegate query to query handlers
