@@ -32,7 +32,7 @@ async def serve(q: Q):
             await update_theme(q)
 
         # Update image if resized
-        elif q.args.image_height is not None and q.args.image_height != q.client.image_height:
+        elif q.args.resize_height != '' and q.args.resize_height != q.client.resize_height:
             await resize_image(q)
 
         # Delegate query to query handlers
@@ -73,6 +73,7 @@ async def initialize_client(q: Q):
     q.client.image_tags = constants.IMAGE_TAGS
     q.client.image_items = constants.IMAGE_ITEMS
     q.client.image_height = constants.IMAGE_HEIGHT
+    q.client.resize_height = str(q.client.image_height)
 
     # Add layouts, header and footer
     q.page['meta'] = cards.meta
@@ -197,6 +198,7 @@ async def resize_image(q: Q):
     # Save annotation
     copy_expando(q.args, q.client)
     q.client.image_items = q.client.image_annotator
+    q.client.image_height = q.client.resize_height
 
     # Refresh data with new height of image
     q.page['image_classes'] = cards.image_classes(

@@ -97,7 +97,7 @@ def image_classes(image_tags: list[dict], image_height: int) -> ui.FormCard:
             ),
             ui.separator(label='Size'),
             ui.textbox(
-                name='image_height',
+                name='resize_height',
                 label='Resize Image',
                 placeholder=str(image_height),
                 suffix='px',
