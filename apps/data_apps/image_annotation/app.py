@@ -31,6 +31,10 @@ async def serve(q: Q):
         elif q.args.theme_dark is not None and q.args.theme_dark != q.client.theme_dark:
             await update_theme(q)
 
+        # Update image if resized
+        elif q.args.image_height is not None and q.args.image_height != q.client.image_height:
+            await resize_image(q)
+
         # Delegate query to query handlers
         elif await handle_on(q):
             pass
@@ -52,6 +56,8 @@ async def initialize_app(q: Q):
 
     q.app.cards = ['image_classes', 'image_annotator', 'error']
 
+    q.app.image_path, = await q.site.upload([constants.IMAGE_PATH])
+
 
 async def initialize_client(q: Q):
     """
@@ -63,11 +69,10 @@ async def initialize_client(q: Q):
     # Set initial argument values
     q.client.theme_dark = True
 
-    q.client.image_data = constants.IMAGES
+    q.client.image_path = q.app.image_path
     q.client.image_tags = constants.IMAGE_TAGS
     q.client.image_items = constants.IMAGE_ITEMS
-    q.client.image_pixel = constants.IMAGE_PIXEL
-    q.client.image_index = 0
+    q.client.image_height = constants.IMAGE_HEIGHT
 
     # Add layouts, header and footer
     q.page['meta'] = cards.meta
@@ -75,12 +80,15 @@ async def initialize_client(q: Q):
     q.page['footer'] = cards.footer
 
     # Add cards for main page
-    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
+    q.page['image_classes'] = cards.image_classes(
+        image_tags=q.client.image_tags,
+        image_height=q.client.image_height
+    )
     q.page['image_annotator'] = cards.image_annotator(
+        image_path=q.client.image_path,
         image_tags=q.client.image_tags,
         image_items=q.client.image_items,
-        images=q.client.image_data[q.client.image_index],
-        image_pixels=q.client.image_pixel
+        image_height=q.client.image_height
     )
 
     await q.page.save()
@@ -113,67 +121,33 @@ async def update_theme(q: Q):
 @on('add')
 async def add_class(q: Q):
     """
-    Add a new class to Image Classes.
+    Add a new class to image classes.
     """
 
     logging.info('Adding a new class')
 
     # Save annotation
     copy_expando(q.args, q.client)
-
-    old_annotation = []
-    for en, cnxt in enumerate(q.client.annotator):
-        x1 = cnxt['shape']['rect']['x1']
-        y1 = cnxt['shape']['rect']['y1']
-        x2 = cnxt['shape']['rect']['x2']
-        y2 = cnxt['shape']['rect']['y2']
-        old_annotation.append(cards.image_annotator_item(x1, y1, x2, y2, tag=cnxt['tag']))
-
-    q.client.image_items = old_annotation
+    q.client.image_items = q.client.image_annotator
 
     # Add new class
-    if len(q.client.add_new_class) > 0:
+    if len(q.client.new_class_name) > 0:
         q.client.image_tags.append({
-            'name': q.client.add_new_class.lower(),
-            'label': q.client.add_new_class,
+            'name': q.client.new_class_name.lower(),
+            'label': q.client.new_class_name,
             'color': '#{:02x}{:02x}{:02x}'.format(randint(0, 255), randint(0, 255), randint(0, 255))
         })
 
     # Refresh data with new class
-    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
-    q.page['image_annotator'] = cards.image_annotator(
+    q.page['image_classes'] = cards.image_classes(
         image_tags=q.client.image_tags,
-        image_items=q.client.image_items,
-        images=q.client.image_data[q.client.image_index],
-        image_pixels=q.client.image_pixel
-
+        image_height=q.client.image_height
     )
-
-    await q.page.save()
-
-
-@on('file_upload')
-async def add_image(q: Q):
-    """
-    Add a new Image to Annotate.
-    """
-
-    logging.info('Adding a new Image')
-
-    # Save annotation
-    copy_expando(q.args, q.client)
-    q.client.image_items = []
-
-    q.client.image_data[q.client.image_index] = q.client.file_upload[0]
-
-    # Refresh data with new class
-    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
     q.page['image_annotator'] = cards.image_annotator(
+        image_path=q.client.image_path,
         image_tags=q.client.image_tags,
         image_items=q.client.image_items,
-        images=q.client.image_data[q.client.image_index],
-        image_pixels=q.client.image_pixel
-
+        image_height=q.client.image_height
     )
 
     await q.page.save()
@@ -181,61 +155,103 @@ async def add_image(q: Q):
 
 @on('delete')
 async def delete_class(q: Q):
+    """
+    Delete a class from image classes.
+    """
 
     logging.info('Deleting a class')
 
     # Save annotation
     copy_expando(q.args, q.client)
+    q.client.image_items = q.client.image_annotator
 
-    old_annotation = []
-    for en, cnxt in enumerate(q.client.annotator):
-        if cnxt['tag'] == q.client.delete_existing_class:
-            logging.info('skipping this class')
-            continue
-        x1 = cnxt['shape']['rect']['x1']
-        y1 = cnxt['shape']['rect']['y1']
-        x2 = cnxt['shape']['rect']['x2']
-        y2 = cnxt['shape']['rect']['y2']
-        old_annotation.append(cards.image_annotator_item(x1, y1, x2, y2, tag=cnxt['tag']))
-
-    q.client.image_items = old_annotation
-
+    # Delete class and it's items
     if len(q.client.image_tags) > 1:
-        q.client.image_tags = [tag for tag in q.client.image_tags if tag['name'] != q.client.delete_existing_class]
+        q.client.image_tags = [tag for tag in q.client.image_tags if tag['name'] != q.client.delete_class_name]
+        q.client.image_items = [item for item in q.client.image_items if item['tag'] != q.client.delete_class_name]
     else:
-        logging.info('Please have at least one class!!')
+        logging.info('No classes deleted since annotator requires at least one class available')
 
     # Refresh data with remaining classes
-    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
+    q.page['image_classes'] = cards.image_classes(
+        image_tags=q.client.image_tags,
+        image_height=q.client.image_height
+    )
     q.page['image_annotator'] = cards.image_annotator(
+        image_path=q.client.image_path,
         image_tags=q.client.image_tags,
         image_items=q.client.image_items,
-        images=q.client.image_data[q.client.image_index],
-        image_pixels=q.client.image_pixel
-
+        image_height=q.client.image_height
     )
 
     await q.page.save()
 
 
-@on('change_pixel')
-async def add_image(q: Q):
+async def resize_image(q: Q):
+    """
+    Resize image height.
+    """
 
-    logging.info('Changing Size of Image')
+    logging.info('Resizing height of the image')
 
     # Save annotation
     copy_expando(q.args, q.client)
+    q.client.image_items = q.client.image_annotator
 
-    q.client.image_pixel = q.client.new_pixel_size
-
-    # Refresh data with new class
-    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
-    q.page['image_annotator'] = cards.image_annotator(
+    # Refresh data with new height of image
+    q.page['image_classes'] = cards.image_classes(
         image_tags=q.client.image_tags,
-        image_items=[],
-        images=q.client.image_data[q.client.image_index],
-        image_pixels=q.client.image_pixel
+        image_height=q.client.image_height
+    )
+    q.page['image_annotator'] = cards.image_annotator(
+        image_path=q.client.image_path,
+        image_tags=q.client.image_tags,
+        image_items=q.client.image_items,
+        image_height=q.client.image_height
+    )
 
+    await q.page.save()
+
+
+@on('new_image')
+async def new_image(q: Q):
+    """
+    Add a new image.
+    """
+
+    logging.info('Adding a new image')
+
+    q.page['meta'].dialog = cards.dialog_new_image
+
+    await q.page.save()
+
+
+@on('upload')
+async def upload_image(q: Q):
+    """
+    Upload image.
+    """
+
+    logging.info('Uploading new image')
+
+    # Update to new image
+    q.client.image_path = q.args.upload[0]
+    q.client.image_items = None
+    q.client.image_height = constants.IMAGE_HEIGHT
+
+    # Remove dialog
+    q.page['meta'].dialog = None
+
+    # Refresh data with new image
+    q.page['image_classes'] = cards.image_classes(
+        image_tags=q.client.image_tags,
+        image_height=q.client.image_height
+    )
+    q.page['image_annotator'] = cards.image_annotator(
+        image_path=q.client.image_path,
+        image_tags=q.client.image_tags,
+        image_items=q.client.image_items,
+        image_height=q.client.image_height
     )
 
     await q.page.save()
@@ -251,45 +267,30 @@ async def download(q: Q):
 
     # Save annotation
     copy_expando(q.args, q.client)
+    q.client.image_items = q.client.image_annotator
 
-    annotation_list = q.client.annotator
-    filename = 'annonations.json'
-    final = open(filename, "w")
+    annotations_file = 'annotations.json'
 
-    with final as output_file:
-        json.dump(annotation_list, output_file)
+    with open(annotations_file, 'w') as outfile:
+        outfile.write(json.dumps(q.client.image_items))
 
-    download_path = await q.site.upload([filename])
+    annotations_path, = await q.site.upload([annotations_file])
 
-    q.page['meta'].redirect = download_path
+    q.page['meta'].redirect = annotations_path
 
-    old_annotation = []
-    for en, cnxt in enumerate(q.client.annotator):
-        x1 = cnxt['shape']['rect']['x1']
-        y1 = cnxt['shape']['rect']['y1']
-        x2 = cnxt['shape']['rect']['x2']
-        y2 = cnxt['shape']['rect']['y2']
-        old_annotation.append(cards.image_annotator_item(x1, y1, x2, y2, tag=cnxt['tag']))
+    await q.page.save()
 
-    q.client.image_items = old_annotation
 
-    # Add new class
-    if len(q.client.add_new_class) > 0:
-        q.client.image_tags.append({
-            'name': q.client.add_new_class.lower(),
-            'label': q.client.add_new_class,
-            'color': '#{:02x}{:02x}{:02x}'.format(randint(0, 255), randint(0, 255), randint(0, 255))
-        })
+@on('dialog_new_image.dismissed')
+async def dismiss_dialog(q: Q):
+    """
+    Dismiss dialog.
+    """
 
-    # Refresh data with new class
-    q.page['image_classes'] = cards.image_classes(image_tags=q.client.image_tags)
-    q.page['image_annotator'] = cards.image_annotator(
-        image_tags=q.client.image_tags,
-        image_items= q.client.image_items,
-        images=q.client.image_data[q.client.image_index],
-        image_pixels=q.client.image_pixel
+    logging.info('Dismissing dialog')
 
-    )
+    q.page['meta'].dialog = None
+
     await q.page.save()
 
 

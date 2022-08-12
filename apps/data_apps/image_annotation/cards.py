@@ -24,11 +24,10 @@ meta = ui.meta_card(
                     direction='row',
                     zones=[
                         ui.zone(name='image_classes', size='20%'),
-                        ui.zone(name='image_annotator', size='70%'),
+                        ui.zone(name='image_annotator', size='80%'),
                     ]
                 ),
-                ui.zone(name='footer',),
-
+                ui.zone(name='footer')
             ]
         )
     ],
@@ -53,6 +52,15 @@ footer = ui.footer_card(
     caption=f'Learn more about <a href="{repo_url}" target="_blank"> WaveTon: 💯 Wave Applications</a>'
 )
 
+# Dialog for uploading new image
+dialog_new_image = ui.dialog(
+    name='dialog_new_image',
+    title='Upload New Image',
+    items=[ui.file_upload(name='upload', file_extensions=['jpg', 'jpeg', 'png'])],
+    closable=True,
+    events=['dismissed']
+)
+
 # A fallback card for handling bugs
 fallback = ui.form_card(
     box='fallback',
@@ -60,11 +68,7 @@ fallback = ui.form_card(
 )
 
 
-def image_annotator_item(x1, y1, x2, y2, tag):
-    return ui.image_annotator_item(shape=ui.image_annotator_rect(x1=x1, y1=y1, x2=x2, y2=y2), tag=tag)
-
-
-def image_classes(image_tags: list[dict]) -> ui.FormCard:
+def image_classes(image_tags: list[dict], image_height: int) -> ui.FormCard:
     """
     Card for image classes.
     """
@@ -72,6 +76,7 @@ def image_classes(image_tags: list[dict]) -> ui.FormCard:
     card = ui.form_card(
         box='image_classes',
         items=[
+            ui.separator(label='Classes'),
             ui.textbox(name='new_class_name', label='Type a new class to be added'),
             ui.buttons(
                 items=[
@@ -79,7 +84,6 @@ def image_classes(image_tags: list[dict]) -> ui.FormCard:
                 ],
                 justify='center'
             ),
-            ui.separator(),
             ui.dropdown(
                 name='delete_class_name',
                 label='Select a class to delete',
@@ -90,6 +94,21 @@ def image_classes(image_tags: list[dict]) -> ui.FormCard:
                     ui.button(name='delete', label='Delete', primary=True)
                 ],
                 justify='center'
+            ),
+            ui.separator(label='Size'),
+            ui.textbox(
+                name='image_height',
+                label='Resize Image',
+                placeholder=str(image_height),
+                suffix='px',
+                trigger=True
+            ),
+            ui.separator(label='New Image'),
+            ui.buttons(
+                items=[
+                    ui.button(name='new_image', label='Add New', primary=True)
+                ],
+                justify='center'
             )
         ]
     )
@@ -98,10 +117,10 @@ def image_classes(image_tags: list[dict]) -> ui.FormCard:
 
 
 def image_annotator(
-    image_tags,
-    images,
-    image_items,
-    image_pixels,
+    image_path: str,
+    image_tags: list[dict],
+    image_items: list[dict] = None,
+    image_height: int = None
 ) -> ui.FormCard:
     """
     Card for Image Annotator.
@@ -111,16 +130,23 @@ def image_annotator(
         box='image_annotator',
         items=[
             ui.image_annotator(
-                name='annotator',
+                name='image_annotator',
                 title='Create boxes to annotate',
-                image=[images][0],
-                items=[image_items][0],
-                image_height=image_pixels,
-                tags=[ui.image_annotator_tag(**tag) for tag in image_tags]
+                image=image_path,
+                tags=[ui.image_annotator_tag(**tag) for tag in image_tags],
+                items=[ui.image_annotator_item(
+                    shape=ui.image_annotator_rect(
+                        x1=item['shape']['rect']['x1'],
+                        y1=item['shape']['rect']['y1'],
+                        x2=item['shape']['rect']['x2'],
+                        y2=item['shape']['rect']['y2']
+                    ),
+                    tag=item['tag']
+                ) for item in image_items] if image_items is not None else None,
+                image_height=f'{image_height}px' if image_height is not None else None
             ),
             ui.buttons(
                 items=[
-                    ui.button(name='upload', label='Upload', primary=True),
                     ui.button(name='download', label='Download', primary=True)
                 ],
                 justify='center'
