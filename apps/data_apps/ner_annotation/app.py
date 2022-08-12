@@ -224,6 +224,8 @@ async def delete_entity(q: Q):
                 if 'tag' in item.keys():
                     if item['tag'] == q.client.delete_entity_name:
                         item.pop('tag')
+    else:
+        logging.info('No entities deleted since annotator requires at least one entity available')
 
     # Refresh data with remaining entities
     q.page['ner_entities'] = cards.ner_entities(ner_tags=q.client.ner_tags)
