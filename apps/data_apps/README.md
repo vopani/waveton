@@ -19,3 +19,4 @@ Applications that help with data preparation, cleaning, transformation, annotati
 | --- | ------------ | ----- | ----------- |
 | 1   | Beginner     | [Datatable Playground](https://github.com/vopani/waveton/tree/main/apps/data_apps/datatable_playground) | Explore Python Datatable with tabular datasets |
 | 2   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/ner_annotation) | Annotate entities for Named-Entity Recognition tasks |
+| 3   | Intermediate | [Image Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/image_annotation) | Annotate images for computer vision tasks |

@@ -13,7 +13,7 @@
 </div>
 
 ## Image Annotation 🖥️
-Annotate Images with Bounding Boxes for Object Detection tasks.
+Annotate images for computer vision tasks.
 
 ![](demo.gif)
 
