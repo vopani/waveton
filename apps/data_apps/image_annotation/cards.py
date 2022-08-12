@@ -1,10 +1,9 @@
 import sys
 import traceback
-
 from h2o_wave import Q, expando_to_dict, ui
 
 # App name
-app_name = 'NER Annotation'
+app_name = 'Image Annotation'
 
 # Link to repo. Report bugs/features here :)
 repo_url = 'https://github.com/vopani/waveton'
@@ -24,8 +23,8 @@ meta = ui.meta_card(
                     size='calc(100vh - 150px)',
                     direction='row',
                     zones=[
-                        ui.zone(name='ner_entities', size='20%'),
-                        ui.zone(name='ner_annotator', size='80%')
+                        ui.zone(name='image_classes', size='20%'),
+                        ui.zone(name='image_annotator', size='80%'),
                     ]
                 ),
                 ui.zone(name='footer')
@@ -38,8 +37,8 @@ meta = ui.meta_card(
 # The header shown on all the app's pages
 header = ui.header_card(
     box='header',
-    title='NER Annotation',
-    subtitle='Annotate entities for Named-Entity Recognition tasks',
+    title='Image Annotation ',
+    subtitle='Annotate images for computer vision tasks',
     icon='Handwriting',
     icon_color='black',
     items=[
@@ -53,6 +52,15 @@ footer = ui.footer_card(
     caption=f'Learn more about <a href="{repo_url}" target="_blank"> WaveTon: 💯 Wave Applications</a>'
 )
 
+# Dialog for uploading new image
+dialog_new_image = ui.dialog(
+    name='dialog_new_image',
+    title='Upload New Image',
+    items=[ui.file_upload(name='upload', file_extensions=['jpg', 'jpeg', 'png'])],
+    closable=True,
+    events=['dismissed']
+)
+
 # A fallback card for handling bugs
 fallback = ui.form_card(
     box='fallback',
@@ -60,30 +68,45 @@ fallback = ui.form_card(
 )
 
 
-def ner_entities(ner_tags: list[dict]) -> ui.FormCard:
+def image_classes(image_tags: list[dict], image_height: int) -> ui.FormCard:
     """
-    Card for NER entities.
+    Card for image classes.
     """
 
     card = ui.form_card(
-        box='ner_entities',
+        box='image_classes',
         items=[
-            ui.textbox(name='new_entity_name', label='Type a new entity to be added'),
+            ui.separator(label='Classes'),
+            ui.textbox(name='new_class_name', label='Type a new class to be added'),
             ui.buttons(
                 items=[
                     ui.button(name='add', label='Add', primary=True)
                 ],
                 justify='center'
             ),
-            ui.separator(),
             ui.dropdown(
-                name='delete_entity_name',
-                label='Select an entity to delete',
-                choices=[ui.choice(name=tag['name'], label=tag['label']) for tag in ner_tags]
+                name='delete_class_name',
+                label='Select a class to delete',
+                choices=[ui.choice(name=tag['name'], label=tag['label']) for tag in image_tags]
             ),
             ui.buttons(
                 items=[
                     ui.button(name='delete', label='Delete', primary=True)
+                ],
+                justify='center'
+            ),
+            ui.separator(label='Size'),
+            ui.textbox(
+                name='resize_height',
+                label='Resize Image',
+                placeholder=str(image_height),
+                suffix='px',
+                trigger=True
+            ),
+            ui.separator(label='New Image'),
+            ui.buttons(
+                items=[
+                    ui.button(name='new_image', label='Add New', primary=True)
                 ],
                 justify='center'
             )
@@ -93,30 +116,40 @@ def ner_entities(ner_tags: list[dict]) -> ui.FormCard:
     return card
 
 
-def ner_annotator(
-    ner_tags: list[dict],
-    ner_items: list[dict],
-    disable_next: bool = False,
-    disable_previous: bool = False
+def image_annotator(
+    image_path: str,
+    image_tags: list[dict],
+    image_items: list[dict] = None,
+    image_height: int = None
 ) -> ui.FormCard:
     """
-    Card for NER annotator.
+    Card for Image Annotator.
     """
 
     card = ui.form_card(
-        box='ner_annotator',
+        box='image_annotator',
         items=[
-            ui.text_annotator(
-                name='ner_annotator',
-                title='Click and/or drag text to annotate',
-                tags=[ui.text_annotator_tag(**tag) for tag in ner_tags],
-                items=[ui.text_annotator_item(**item) for item in ner_items]
+            ui.image_annotator(
+                name='image_annotator',
+                title='Create boxes to annotate',
+                image=image_path,
+                tags=[ui.image_annotator_tag(**tag) for tag in image_tags],
+                items=[ui.image_annotator_item(
+                    shape=ui.image_annotator_rect(
+                        x1=item['shape']['rect']['x1'],
+                        y1=item['shape']['rect']['y1'],
+                        x2=item['shape']['rect']['x2'],
+                        y2=item['shape']['rect']['y2']
+                    ),
+                    tag=item['tag']
+                ) for item in image_items] if image_items is not None else None,
+                image_height=f'{image_height}px' if image_height is not None else None
             ),
             ui.buttons(
                 items=[
-                    ui.button(name='next', label='Next', primary=True, disabled=disable_next),
-                    ui.button(name='previous', label='Previous', disabled=disable_previous)
-                ]
+                    ui.button(name='download', label='Download', primary=True)
+                ],
+                justify='center'
             )
         ]
     )
