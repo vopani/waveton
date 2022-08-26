@@ -1,0 +1,5 @@
+diffusers==0.2.4
+h2o_wave==0.22.0
+scipy==1.9.0
+torch==1.12.1
+transformers==4.21.1

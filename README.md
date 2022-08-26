@@ -60,7 +60,10 @@ It is recommended to go through the sets in order for best experience, but you m
 
 #### Set 09 • Doppelganger Apps
 
-#### Set 10 • SOTA Apps
+#### Set 10 • GPU Apps
+| App | Level        | Title | Description |
+| --- | ------------ | ----- | ----------- |
+| 1   | Intermediate | [Stable Diffusion](https://github.com/vopani/waveton/tree/main/apps/gpu_apps/stable_diffusion) | Generate images from prompts using Stable Diffusion model |
 
 **P.S.** Every application can be run independently
 
