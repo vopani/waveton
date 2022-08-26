@@ -76,14 +76,14 @@ setup = ui.form_card(
             justify='center'
         ),
         ui.text(content='''<center>
-            🔑 You can find your HuggingFace access token on 
-            <a href="https://huggingface.co/settings/tokens" target="_blank">
-            https://huggingface.co/settings/tokens</a>
-        </center>'''),
-        ui.text(content='''<center>
             📃 Please read and accept the model license on 
             <a href="https://huggingface.co/CompVis/stable-diffusion-v1-4" target="_blank">
             https://huggingface.co/CompVis/stable-diffusion-v1-4</a>
+        </center>'''),
+        ui.text(content='''<center>
+            🔑 You can find your HuggingFace access token on 
+            <a href="https://huggingface.co/settings/tokens" target="_blank">
+            https://huggingface.co/settings/tokens</a>
         </center>''')
     ]
 )
