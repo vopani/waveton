@@ -39,7 +39,7 @@ git clone https://github.com/vopani/waveton.git
 3. Create a virtual environment
 
 ```bash
-cd waveton/apps/skeleton_apps/theme_switch
+cd waveton/apps/gpu_apps/stable_diffusion
 python3 -m venv venv
 source venv/bin/activate
 ```

@@ -100,7 +100,12 @@ main = ui.form_card(
             justify='center'
         ),
         ui.separator(label=''),
-        ui.image(title='sd_image')
+        ui.inline(
+            items=[
+                ui.image(title='sd_image', visible=False)
+            ],
+            justify='center'
+        )
     ]
 )
 

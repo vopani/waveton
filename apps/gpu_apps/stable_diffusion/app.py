@@ -147,11 +147,11 @@ async def generate(q: Q):
 
     image.save('sd_image.png')
 
-    with open('sd_image', 'rb') as image_file:
-        image_base64 = base64.b64encode(image_file.read())
+    sd_image_path, = await q.site.upload(['sd_image.png'])
 
     q.page['main'].items[2].separator.label = q.args.prompt
-    q.page['main'].items[3].image.image = image_base64
+    q.page['main'].items[3].inline.items[0].image.visible = True
+    q.page['main'].items[3].inline.items[0].image.path = sd_image_path
 
     await q.page.save()
 
