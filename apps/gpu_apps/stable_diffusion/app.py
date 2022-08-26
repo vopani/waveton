@@ -75,7 +75,7 @@ async def initialize_client(q: Q):
     # Add cards for the main page
     if not torch.cuda.is_available():
         q.page['main'] = cards.gpu
-    if q.app.access_token == '':
+    elif q.app.access_token == '':
         q.page['main'] = cards.setup
     else:
         q.page['main'] = cards.main
