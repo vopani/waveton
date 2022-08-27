@@ -88,32 +88,77 @@ setup = ui.form_card(
     ]
 )
 
-# Main card
-main = ui.form_card(
-    box='main',
-    items=[
+# A fallback card for handling bugs
+fallback = ui.form_card(
+    box='fallback',
+    items=[ui.text('Uh-oh, something went wrong!')]
+)
+
+
+def main(images: int, steps: int, guidance_scale: float, image_paths=None) -> ui.FormCard:
+    """
+    Card for entering prompt and displaying generated images.
+    """
+
+    card_items=[
         ui.textbox(name='prompt', label='Prompt'),
+        ui.inline(
+            items=[
+                ui.slider(
+                    name='images',
+                    label='Images',
+                    min=1,
+                    max=5,
+                    value=images,
+                    width='400px'
+                ),
+                ui.slider(
+                    name='steps',
+                    label='Steps',
+                    min=1,
+                    max=50,
+                    value=steps,
+                    width='400px'),
+                ui.slider(
+                    name='guidance_scale',
+                    label='Guidance Scale',
+                    min=0.0,
+                    max=50.0,
+                    step=0.5,
+                    value=guidance_scale,
+                    width='400px')
+            ],
+            justify='around'
+        ),
         ui.buttons(
             items=[
                 ui.button(name='generate', label='Generate', primary=True)
             ],
             justify='center'
         ),
-        ui.separator(label=''),
-        ui.inline(
-            items=[
-                ui.image(title='sd_image', visible=False)
-            ],
-            justify='center'
-        )
+        ui.separator(label='')
     ]
-)
 
-# A fallback card for handling bugs
-fallback = ui.form_card(
-    box='fallback',
-    items=[ui.text('Uh-oh, something went wrong!')]
-)
+    if image_paths is not None:
+        card_items.extend([
+            ui.inline(
+                items=[
+                    ui.image(
+                        title=f'sd_image_{i}',
+                        path=image_path,
+                        width=f'{100/len(image_paths)}%'
+                    ) for i, image_path in enumerate(image_paths)
+                ],
+                justify='center'
+            )
+        ])
+
+    card = ui.form_card(
+        box='main',
+        items=card_items
+    )
+    
+    return card
 
 
 def crash_report(q: Q) -> ui.FormCard:

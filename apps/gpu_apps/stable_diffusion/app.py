@@ -1,10 +1,12 @@
 import base64
 import logging
+import os
 
 import torch
 from torch import autocast
 from diffusers import StableDiffusionPipeline
 from h2o_wave import Q, main, app, copy_expando, handle_on, on
+from PIL import Image
 
 import cards
 
@@ -66,6 +68,9 @@ async def initialize_client(q: Q):
 
     # Set initial argument values
     q.client.theme_dark = True
+    q.client.images = 4
+    q.client.steps = 50
+    q.client.guidance_scale = 7.5
 
     # Add layouts, header and footer
     q.page['meta'] = cards.meta
@@ -74,11 +79,18 @@ async def initialize_client(q: Q):
 
     # Add cards for the main page
     if not torch.cuda.is_available():
+        # Display GPU unavailable is not found
         q.page['main'] = cards.gpu
     elif q.app.access_token == '':
+        # Display setup if GPU found
         q.page['main'] = cards.setup
     else:
-        q.page['main'] = cards.main
+        # Display main if setup complete with access token
+        q.page['main'] = cards.main(
+            images=q.client.images,
+            steps=q.client.steps,
+            guidance_scale=q.client.guidance_scale
+        )
 
     await q.page.save()
 
@@ -115,8 +127,10 @@ async def save(q: Q):
 
     logging.info('Saving access token')
 
+    # Save access token
     q.app.access_token = q.args.access_token
 
+    # Check if Stable Diffusion model is accessible
     try:
         q.app.model = StableDiffusionPipeline.from_pretrained(
             'CompVis/stable-diffusion-v1-4',
@@ -142,16 +156,34 @@ async def generate(q: Q):
 
     logging.info('Generating images')
 
+    # Save all inputs
+    copy_expando(q.args, q.client)
+
+    # Generate images for prompt
     with autocast('cuda'):
-        image = q.app.model(q.args.prompt)['sample'][0]
+        for i in range(q.client.images):
+            image = q.app.model(
+                q.client.prompt,
+                num_inference_steps=q.client.steps,
+                guidance_scale=q.client.guidance_scale
+            )['sample'][0]
 
-    image.save('sd_image.png')
+            image.save(f'sd_image_{i}.png', 'PNG')
 
-    sd_image_path, = await q.site.upload(['sd_image.png'])
+    # Upload images to Wave server
+    image_paths = await q.site.upload([f'sd_image_{i}.png' for i in range(q.client.images)])
 
-    q.page['main'].items[2].separator.label = q.args.prompt
-    q.page['main'].items[3].inline.items[0].image.visible = True
-    q.page['main'].items[3].inline.items[0].image.path = sd_image_path
+    # Remove images locally
+    for i in range(q.client.images):
+        os.remove(f'sd_image_{i}.png')
+
+    # Update images
+    q.page['main'] = cards.main(
+        images=q.client.images,
+        steps=q.client.steps,
+        guidance_scale=q.client.guidance_scale,
+        image_paths=image_paths
+    )
 
     await q.page.save()
 
