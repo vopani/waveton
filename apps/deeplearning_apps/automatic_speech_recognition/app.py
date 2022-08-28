@@ -52,6 +52,7 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
+    # Set initial argument values
     q.app.cards = ['main', 'error']
 
     q.app.processor = Wav2Vec2Processor.from_pretrained('facebook/wav2vec2-base-960h')

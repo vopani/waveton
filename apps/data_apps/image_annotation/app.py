@@ -20,12 +20,10 @@ async def serve(q: Q):
         # Initialize the app if not already
         if not q.app.initialized:
             await initialize_app(q)
-            q.app.initialized = True
 
         # Initialize the client (browser tab) if not already
         if not q.client.initialized:
             await initialize_client(q)
-            q.client.initialized = True
 
         # Update theme if toggled
         elif q.args.theme_dark is not None and q.args.theme_dark != q.client.theme_dark:
@@ -54,9 +52,12 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
+    # Set initial argument values
     q.app.cards = ['image_classes', 'image_annotator', 'error']
 
     q.app.image_path, = await q.site.upload([constants.IMAGE_PATH])
+
+    q.app.initialized = True
 
 
 async def initialize_client(q: Q):
@@ -91,6 +92,8 @@ async def initialize_client(q: Q):
         image_items=q.client.image_items,
         image_height=q.client.image_height
     )
+
+    q.client.initialized = True
 
     await q.page.save()
 
