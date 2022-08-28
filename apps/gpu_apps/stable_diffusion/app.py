@@ -1,4 +1,3 @@
-import base64
 import logging
 import os
 
@@ -6,7 +5,6 @@ import torch
 from torch import autocast
 from diffusers import StableDiffusionPipeline
 from h2o_wave import Q, main, app, copy_expando, handle_on, on
-from PIL import Image
 
 import cards
 
@@ -54,8 +52,8 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
+    # Set initial argument values
     q.app.cards = ['main', 'error']
-
     q.app.access_token = ''
 
 
@@ -79,12 +77,18 @@ async def initialize_client(q: Q):
 
     # Add cards for the main page
     if not torch.cuda.is_available():
+        logging.info('Displaying GPU page')
+
         # Display GPU unavailable is not found
         q.page['main'] = cards.gpu
     elif q.app.access_token == '':
+        logging.info('Displaying setup page')
+
         # Display setup if GPU found
         q.page['main'] = cards.setup
     else:
+        logging.info('Displaying main page')
+
         # Display main if setup complete with access token
         q.page['main'] = cards.main(
             images=q.client.images,
@@ -207,7 +211,7 @@ async def show_error(q: Q, error: str):
 
     logging.error(error)
 
-    # Clear all cards from the page
+    # Clear all cards
     clear_cards(q, q.app.cards)
 
     # Format and display the error
@@ -224,6 +228,9 @@ async def reload_client(q: Q):
     """
 
     logging.info('Reloading client')
+
+    # Clear all cards
+    clear_cards(q, q.app.cards)
 
     # Reload the client
     await initialize_client(q)

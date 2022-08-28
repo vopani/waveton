@@ -256,7 +256,7 @@ async def show_error(q: Q, error: str):
 
     logging.error(error)
 
-    # Clear all cards from the page
+    # Clear all cards
     clear_cards(q, q.app.cards)
 
     # Format and display the error
@@ -272,6 +272,9 @@ async def reload_client(q: Q):
     """
 
     logging.info('Reloading client')
+
+    # Clear all cards
+    clear_cards(q, q.app.cards)
 
     # Reload the client
     await initialize_client(q)
