@@ -2,7 +2,6 @@ import logging
 import os
 
 import torch
-from torch import autocast
 from diffusers import StableDiffusionPipeline
 from h2o_wave import Q, main, app, copy_expando, handle_on, on
 
@@ -167,7 +166,7 @@ async def generate(q: Q):
     copy_expando(q.args, q.client)
 
     # Generate images for prompt
-    with autocast('cuda'):
+    with torch.autocast('cuda'):
         for i in range(q.client.images):
             image = q.app.model(
                 q.client.prompt,
