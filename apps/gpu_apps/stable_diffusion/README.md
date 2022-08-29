@@ -24,7 +24,7 @@ Generate images from prompts using Stable Diffusion model.
 nvidia-smi
 ```
 
-2. Check the version of Python, must be Python 3.7+ but recommended to use Python 3.10+ for best experience
+2. Check the version of Python, must be Python 3.9+ but recommended to use Python 3.10+ for best experience
 
 ```bash
 python3 --version
