@@ -95,12 +95,18 @@ fallback = ui.form_card(
 )
 
 
-def main(images: int, steps: int, guidance_scale: float, image_paths=None) -> ui.FormCard:
+def main(
+    images: int,
+    steps: int,
+    guidance_scale: float,
+    prompt: str = None,
+    image_paths: list[str] = None
+) -> ui.FormCard:
     """
     Card for entering prompt and displaying generated images.
     """
 
-    card_items=[
+    card_items = [
         ui.textbox(name='prompt', label='Prompt'),
         ui.inline(
             items=[
@@ -135,12 +141,12 @@ def main(images: int, steps: int, guidance_scale: float, image_paths=None) -> ui
                 ui.button(name='generate', label='Generate', primary=True)
             ],
             justify='center'
-        ),
-        ui.separator(label='')
+        )
     ]
 
     if image_paths is not None:
         card_items.extend([
+            ui.separator(label=prompt),
             ui.inline(
                 items=[
                     ui.image(

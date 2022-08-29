@@ -188,6 +188,7 @@ async def generate(q: Q):
         images=q.client.images,
         steps=q.client.steps,
         guidance_scale=q.client.guidance_scale,
+        prompt=q.client.prompt,
         image_paths=image_paths
     )
 
