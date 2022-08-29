@@ -58,8 +58,10 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
-    q.app.default_data = dt.fread('waveton_sample.csv')
+    # Set initial argument values
     q.app.cards = ['main', 'error']
+
+    q.app.default_data = dt.fread('waveton_sample.csv')
 
     q.app.initialized = True
 
@@ -256,7 +258,7 @@ async def show_error(q: Q, error: str):
 
     logging.error(error)
 
-    # Clear all cards from the page
+    # Clear all cards
     clear_cards(q, q.app.cards)
 
     # Format and display the error
@@ -272,6 +274,9 @@ async def reload_client(q: Q):
     """
 
     logging.info('Reloading client')
+
+    # Clear all cards
+    clear_cards(q, q.app.cards)
 
     # Reload the client
     await initialize_client(q)

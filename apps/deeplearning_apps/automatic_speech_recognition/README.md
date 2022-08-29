@@ -18,7 +18,7 @@ Speech to text in English using Wav2Vec model.
 ![](demo.gif)
 
 ## Setup ⚙️
-1. Check the version of Python, must be Python 3.7+ but recommended to use Python 3.10+ for best experience
+1. Check the version of Python, must be Python 3.9+ but recommended to use Python 3.10+ for best experience
 
 ```bash
 python3 --version

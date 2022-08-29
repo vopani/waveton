@@ -52,6 +52,7 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
+    # Set initial argument values
     q.app.cards = ['main', 'error']
 
     q.app.processor = Wav2Vec2Processor.from_pretrained('facebook/wav2vec2-base-960h')
@@ -171,7 +172,7 @@ async def show_error(q: Q, error: str):
 
     logging.error(error)
 
-    # Clear all cards from the page
+    # Clear all cards
     clear_cards(q, q.app.cards)
 
     # Format and display the error
@@ -187,6 +188,9 @@ async def reload_client(q: Q):
     """
 
     logging.info('Reloading client')
+
+    # Clear all cards
+    clear_cards(q, q.app.cards)
 
     # Reload the client
     await initialize_client(q)

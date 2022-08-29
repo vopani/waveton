@@ -18,12 +18,10 @@ async def serve(q: Q):
         # Initialize the app if not already
         if not q.app.initialized:
             await initialize_app(q)
-            q.app.initialized = True  # Mark as initialized at the app level (global to all clients)
 
         # Initialize the client (browser tab) if not already
         if not q.client.initialized:
             await initialize_client(q)
-            q.client.initialized = True  # Mark as initialized at the client (browser tab) level
 
         # Delegate query to query handlers
         elif await handle_on(q):
@@ -48,6 +46,9 @@ async def initialize_app(q: Q):
     # Add app-level initialization logic here (loading datasets, database connections, etc.)
     q.app.cards = ['main']
 
+    # Mark as initialized at the app level (global to all clients)
+    q.app.initialized = True
+
 
 async def initialize_client(q: Q):
     """
@@ -65,6 +66,9 @@ async def initialize_client(q: Q):
     q.page['main'] = cards.main
 
     # Add more cards to the page
+
+    # Mark as initialized at the client (browser tab) level
+    q.client.initialized = True
 
     # Save the page
     await q.page.save()
@@ -88,7 +92,7 @@ async def show_error(q: Q, error: str):
 
     logging.error(error)
 
-    # Clear all cards from the page
+    # Clear all cards
     clear_cards(q, q.app.cards)
 
     # Format and display the error
@@ -105,6 +109,9 @@ async def reload_client(q: Q):
     """
 
     logging.info('Reloading client')
+
+    # Clear all cards
+    clear_cards(q, q.app.cards)
 
     # Reload the client
     await initialize_client(q)

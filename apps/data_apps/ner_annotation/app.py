@@ -20,12 +20,10 @@ async def serve(q: Q):
         # Initialize the app if not already
         if not q.app.initialized:
             await initialize_app(q)
-            q.app.initialized = True
 
         # Initialize the client (browser tab) if not already
         if not q.client.initialized:
             await initialize_client(q)
-            q.client.initialized = True
 
         # Update theme if toggled
         elif q.args.theme_dark is not None and q.args.theme_dark != q.client.theme_dark:
@@ -50,7 +48,10 @@ async def initialize_app(q: Q):
 
     logging.info('Initializing app')
 
+    # Set initial argument values
     q.app.cards = ['ner_entities', 'ner_annotator', 'error']
+
+    q.app.initialized = True
 
 
 async def initialize_client(q: Q):
@@ -82,6 +83,8 @@ async def initialize_client(q: Q):
         disable_next=q.client.disable_next,
         disable_previous=q.client.disable_previous
     )
+
+    q.client.initialized = True
 
     await q.page.save()
 
@@ -258,7 +261,7 @@ async def show_error(q: Q, error: str):
 
     logging.error(error)
 
-    # Clear all cards from the page
+    # Clear all cards
     clear_cards(q, q.app.cards)
 
     # Format and display the error
@@ -275,6 +278,9 @@ async def reload_client(q: Q):
     """
 
     logging.info('Reloading client')
+
+    # Clear all cards
+    clear_cards(q, q.app.cards)
 
     # Reload the client
     await initialize_client(q)
