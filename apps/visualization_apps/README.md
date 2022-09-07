@@ -12,42 +12,10 @@
 
 </div>
 
-## Image Augmentation 🖥️
-Visualize Augmented images for computer vision tasks.
+## Set 05 • Visualization Apps 🖥️
+Applications that help with data preparation, cleaning, transformation, annotation and adhoc processing.
 
+| App | Level        | Title | Description |
+| --- | ------------ | ----- | ----------- |
+| 1   | Beginner     | [Image Augmentation](https://github.com/vopani/waveton/tree/main/apps/visualization_apps/image_augmentation) | Visualize the augmented Images for computer vision tasks. |
 
-## Setup ⚙️
-1. Check the version of Python, must be Python 3.9+ but recommended to use Python 3.10+ for best experience
-
-```bash
-python3 --version
-```
-
-2. Clone the repository
-
-```bash
-git clone https://github.com/vopani/waveton.git
-```
-
-3. Create a virtual environment
-
-```bash
-cd waveton/apps/visualization_apps/image_augmentation
-python3 -m venv venv
-source venv/bin/activate
-```
-
-4. Install the packages
-
-```bash
-python3 -m pip install --upgrade pip
-python3 -m pip install -r requirements.txt
-```
-
-5. Run the application
-
-```bash
-wave run app
-```
-
-6. View the application on your local browser: [http://localhost:10101](http://localhost:10101)
