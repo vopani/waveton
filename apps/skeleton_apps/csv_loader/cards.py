@@ -1,10 +1,11 @@
 import sys
 import traceback
 
+import datatable as dt
 from h2o_wave import Q, expando_to_dict, ui
 
 # App name
-app_name = 'Datatable Playground'
+app_name = 'CSV Loader'
 
 # Link to repo. Report bugs/features here :)
 repo_url = 'https://github.com/vopani/waveton'
@@ -19,7 +20,7 @@ meta = ui.meta_card(
             breakpoint='xs',
             zones=[
                 ui.zone(name='header'),
-                ui.zone(name='main', size='calc(100vh - 130px)'),
+                ui.zone(name='main', direction='row', size='calc(100vh - 130px)'),
                 ui.zone(name='footer')
             ]
         )
@@ -30,9 +31,9 @@ meta = ui.meta_card(
 # The header shown on all the app's pages
 header = ui.header_card(
     box='header',
-    title='Datatable Playground',
-    subtitle='Explore Python Datatable with tabular datasets',
-    icon='TableComputed',
+    title='CSV Loader',
+    subtitle='Load a csv file into a table',
+    icon='Table',
     icon_color='black',
     items=[ui.toggle(name='theme_dark', label='Dark Mode', value=True, trigger=True)]
 )
@@ -43,52 +44,65 @@ footer = ui.footer_card(
     caption=f'Learn more about <a href="{repo_url}" target="_blank"> WaveTon: 💯 Wave Applications</a>'
 )
 
-# Card for displaying query and table
-main = ui.form_card(
-    box='main',
-    items=[
-        ui.inline(
-            items=[
-                ui.textbox(
-                    name='query',
-                    label='Dataset Query',
-                    placeholder='eg: data[dt.f.price > 1, :]',
-                    value='',
-                    spellcheck=False,
-                    trigger=True,
-                    tooltip='Refer the dataset using "data", "df" or "DT", & datatable as "dt"',
-                    width='80%',
-                ),
-                ui.dropdown(
-                    name='dataset',
-                    label='Select Dataset',
-                    choices=[ui.choice(name='waveton_sample.csv', label='waveton_sample.csv')],
-                    value='waveton_sample.csv',
-                    trigger=True,
-                    width='15%'
-                )
-            ]
-        ),
-        ui.separator(label=''),
-        ui.table(name='data', columns=[], height='calc(100vh - 285px)')
-    ],
-    commands=[ui.command(name='add_dataset', label='Add New Dataset', icon='Upload')]
-)
-
-# Dialog for adding new dataset
-dialog_upload_dataset = ui.dialog(
-    name='dialog_upload_dataset',
-    title='Upload New Dataset',
-    items=[ui.file_upload(name='upload', file_extensions=['csv', 'jay', 'txt', 'xlsx'])],
-    closable=True,
-    events=['dismissed']
-)
-
 # A fallback card for handling bugs
 fallback = ui.form_card(
     box='fallback',
     items=[ui.text('Uh-oh, something went wrong!')]
 )
+
+
+def upload(path_default_data: str) -> ui.FormCard:
+    """
+    Card for uploading data.
+    """
+
+    card = ui.form_card(
+        box=ui.box(zone='main', order=1, size=1),
+        items=[
+            ui.text_l(content='<center>Upload a csv file'),
+            ui.inline(
+                items=[ui.file_upload(name='upload', file_extensions=['csv'], height='200px', max_file_size=100)],
+                justify='center'
+            ),
+            ui.text(content=f'<center>Or use the sample file: <a href="{path_default_data}">waveton_sample.csv')
+        ]
+    )
+
+    return card
+
+
+def table(name: str, data: dt.Frame) -> ui.FormCard:
+    """
+    Card for displaying csv data in table.
+    """
+
+    card = ui.form_card(
+        box=ui.box(zone='main', order=2, size=10),
+        items=[
+            ui.text_l(content=f'<center>{name}'),
+            ui.table(
+                name='data',
+                columns=[ui.table_column(
+                    name=str(col),
+                    label=str(col),
+                    sortable=True,
+                    searchable=True,
+                    filterable=True,
+                    link=False
+                ) for col in data.names],
+                rows=[ui.table_row(
+                    name=str(i),
+                    cells=[str(value) for value in data[i, :].to_tuples()[0]]
+                ) for i in range(data.nrows)],
+                groupable=True,
+                downloadable=True,
+                resettable=True,
+                height='calc(100vh - 210px)'
+            )
+        ]
+    )
+
+    return card
 
 
 def crash_report(q: Q) -> ui.FormCard:
