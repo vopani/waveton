@@ -35,6 +35,8 @@ It is recommended to go through the sets in order for best experience, but you m
 | 1   | Beginner     | [Hello Wave](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/hello_wave) | Hello World example |
 | 2   | Beginner     | [Basic Template](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/basic_template) | Building blocks to kickstart an app |
 | 3   | Beginner     | [Theme Switch](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/theme_switch) | Switch between light and dark modes |
+| 4   | Beginner     | [CSV Loader](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/csv_loader)         | Load a csv file into a table |
+
 
 #### Set 02 • [Data Apps](https://github.com/vopani/waveton/tree/main/apps/data_apps)
 | App | Level        | Title | Description |
@@ -60,7 +62,7 @@ It is recommended to go through the sets in order for best experience, but you m
 
 #### Set 09 • Doppelganger Apps
 
-#### Set 10 • GPU Apps
+#### Set 10 • [GPU Apps](https://github.com/vopani/waveton/tree/main/apps/gpu_apps)
 | App | Level        | Title | Description |
 | --- | ------------ | ----- | ----------- |
 | 1   | Intermediate | [Stable Diffusion](https://github.com/vopani/waveton/tree/main/apps/gpu_apps/stable_diffusion) | Generate images from prompts using Stable Diffusion model |
