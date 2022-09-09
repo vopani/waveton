@@ -32,7 +32,7 @@ header = ui.header_card(
     box='header',
     title='Datatable Playground',
     subtitle='Explore Python Datatable with tabular datasets',
-    icon='Table',
+    icon='TableComputed',
     icon_color='black',
     items=[ui.toggle(name='theme_dark', label='Dark Mode', value=True, trigger=True)]
 )
