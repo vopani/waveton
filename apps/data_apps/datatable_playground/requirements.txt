@@ -1,2 +1,2 @@
 datatable==1.0.0
-h2o_wave==0.22.0
+h2o_wave==0.23.0
