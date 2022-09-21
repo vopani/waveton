@@ -1,5 +1,3 @@
-IMAGE_PATH = 'sample.jpeg'
-
 IMAGE_TAGS = [
     {
         'name': 'television',
