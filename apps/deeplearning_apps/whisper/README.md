@@ -12,43 +12,55 @@
 
 </div>
 
-## Image Annotation 🖥️
-Annotate images for computer vision tasks.
+## Whisper 🖥️
+Speech to text using OpenAI's Whisper model.
 
 ![](demo.gif)
 
 ## Setup ⚙️
 1. Check the version of Python, must be Python 3.9+ but recommended to use Python 3.10+ for best experience
 
-```bash
+```commandline
 python3 --version
 ```
 
 2. Clone the repository
 
-```bash
+```commandline
 git clone https://github.com/vopani/waveton.git
 ```
 
 3. Create a virtual environment
 
-```bash
-cd waveton/apps/data_apps/image_annotation
+```commandline
+cd waveton/apps/deeplearning_apps/whisper
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-4. Install the packages
+4. Install ffmpeg
 
-```bash
+On Linux:
+```commandline
+sudo apt update && sudo apt install ffmpeg
+```
+
+On Mac:
+```commandline
+brew install ffmpeg                         
+```
+
+5. Install the packages
+
+```commandline
 python3 -m pip install -U pip
 python3 -m pip install -r requirements.txt
 ```
 
-5. Run the application
+6. Run the application
 
-```bash
+```commandline
 wave run app
 ```
 
-6. View the application on your local browser: [http://localhost:10101](http://localhost:10101)
+7. View the application on your local browser: [http://localhost:10101](http://localhost:10101)

@@ -38,17 +38,29 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-4. Install the packages
+4. Install ffmpeg
 
-```bash
-python3 -m pip install --upgrade pip
+On Linux:
+```commandline
+sudo apt update && sudo apt install ffmpeg
+```
+
+On Mac:
+```commandline
+brew install ffmpeg                         
+```
+
+5. Install the packages
+
+```commandline
+python3 -m pip install -U pip
 python3 -m pip install -r requirements.txt
 ```
 
-5. Run the application
+6. Run the application
 
-```bash
+```commandline
 wave run app
 ```
 
-6. View the application on your local browser: [http://localhost:10101](http://localhost:10101)
+7. View the application on your local browser: [http://localhost:10101](http://localhost:10101)
