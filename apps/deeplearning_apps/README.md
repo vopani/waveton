@@ -15,6 +15,7 @@
 ## Set 08 • Deep Learning Apps 🖥️
 Applications that showcase deep learning based solutions.
 
-| App | Level        | Title | Description |
-| --- | ------------ | ----- | ----------- |
+| App | Level        | Title                                                                                                                           | Description                                   |
+|-----|--------------|---------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
 | 1   | Expert       | [Automatic Speech Recognition](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/automatic_speech_recognition) | Speech to text in English using Wav2Vec model |
+| 2   | Expert       | [Whisper](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/whisper)                                           | Speech to text using OpenAI's Whisper model   |

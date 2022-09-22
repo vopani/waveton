@@ -15,6 +15,6 @@
 ## Set 10 • GPU Apps 🖥️
 Applications that are required to be run on GPUs for faster processing and inferencing.
 
-| App | Level        | Title | Description |
-| --- | ------------ | ----- | ----------- |
+| App | Level        | Title                                                                                          | Description                                               |
+|-----|--------------|------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
 | 1   | Intermediate | [Stable Diffusion](https://github.com/vopani/waveton/tree/main/apps/gpu_apps/stable_diffusion) | Generate images from prompts using Stable Diffusion model |
