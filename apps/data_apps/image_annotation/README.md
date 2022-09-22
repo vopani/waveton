@@ -41,7 +41,7 @@ source venv/bin/activate
 4. Install the packages
 
 ```bash
-python3 -m pip install --upgrade pip
+python3 -m pip install -U pip
 python3 -m pip install -r requirements.txt
 ```
 
