@@ -67,20 +67,46 @@ fallback = ui.form_card(
 )
 
 
-def augmentations(tab: str) -> ui.FormCard:
+def augmentations(tab: str, toggle_values: dict) -> ui.FormCard:
     """
     Card for augmentations.
     """
     if tab == 'light':
-        augs = [
-            ui.toggle(name='Normalize', label='Normalize', trigger=True),
-            ui.toggle(name='RandomGamma', label='RandomGamma', trigger=True)
+        augmentations_list = [
+            'Normalize',
+            'RandomGamma',
+            'RandomGridShuffle',
+            'HueSaturationValue',
+            'RGBShift',
+            'RandomBrightness',
+            'RandomContrast',
+            'CLAHE',
+            'ChannelShuffle',
+            'RandomBrightnessContrast',
+            'RandomShadow',
+            'Equalize',
+            'MultiplicativeNoise',
+            'FancyPCA',
+            'Sharpen',
+            'PixelDropout'
         ]
     else:
-        augs = [
-            ui.toggle(name='Blur', label='Blur', trigger=True),
-            ui.toggle(name='MotionBlur', label='MotionBlur', trigger=True)
+        augmentations_list = [
+            'Blur',
+            'MotionBlur',
+            'MedianBlur',
+            'GaussianBlur',
+            'GaussNoise',
+            'GlassBlur',
+            'AdvancedBlur',
+            'ColorJitter',
+            'Downscale'
         ]
+
+    augs = [
+        ui.toggle(name=augmentation, label=augmentation, value=toggle_values[augmentation], trigger=True)
+        for augmentation in augmentations_list
+    ]
 
     card = ui.form_card(
         box='augmentations',

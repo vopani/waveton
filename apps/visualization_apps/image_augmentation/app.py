@@ -3,7 +3,7 @@ import os
 
 import albumentations as A
 import cv2
-from h2o_wave import Q, main, app, copy_expando, handle_on, on
+from h2o_wave import Q, main, app, copy_expando, expando_to_dict, handle_on, on
 
 import cards
 import constants
@@ -17,6 +17,7 @@ async def serve(q: Q):
     """
     Main entry point. All queries pass through this function.
     """
+    print(q.args)
     try:
         # Initialize the app if not already
         if not q.app.initialized:
@@ -33,6 +34,10 @@ async def serve(q: Q):
         # Update tab if switched
         elif q.args.tab is not None and q.args.tab != q.client.tab:
             await update_tab(q)
+
+        # Update augmented images if any augmentation is changed
+        elif any([q.args[augmentation] is not None for augmentation in constants.AUGMENTATIONS]):
+            await update_augmented_images(q)
 
         # Delegate query to query handlers
         elif await handle_on(q):
@@ -75,6 +80,8 @@ async def initialize_client(q: Q):
     q.client.base_image = q.app.default_image
     q.client.images = 2
     q.client.augmented_image_paths = [q.client.base_image_path] * q.client.images
+    for augmentation in constants.AUGMENTATIONS:
+        q.client[augmentation] = False
 
     # Add layouts, header and footer
     q.page['meta'] = cards.meta
@@ -82,9 +89,7 @@ async def initialize_client(q: Q):
     q.page['footer'] = cards.footer
 
     # Add cards for the main page
-    q.page['augmentations'] = cards.augmentations(
-        tab=q.client.tab
-    )
+    q.page['augmentations'] = cards.augmentations(tab=q.client.tab, toggle_values=expando_to_dict(q.client))
     q.page['images'] = cards.images(
         base_image_path=q.client.base_image_path,
         augmented_image_paths=q.client.augmented_image_paths
@@ -131,9 +136,7 @@ async def update_tab(q: Q):
         logging.info('Updating tab from heavy to light')
 
     # Update list of augmentations
-    q.page['augmentations'] = cards.augmentations(
-        tab=q.client.tab
-    )
+    q.page['augmentations'] = cards.augmentations(tab=q.client.tab, toggle_values=expando_to_dict(q.client))
 
     await q.page.save()
 
@@ -162,15 +165,11 @@ async def upload(q: Q):
 
     # Update image
     q.client.base_image_path = q.args.upload[0]
-    q.client.base_image = cv2.imread(q.site.download(q.client.base_image_path, '.'))
+    q.client.base_image = cv2.imread(await q.site.download(q.client.base_image_path, '.'))
 
     await update_augmented_images(q)
 
 
-@on('Normalize', lambda x: x is not None)
-@on('RandomGamma', lambda x: x is not None)
-@on('Blur', lambda x: x is not None)
-@on('MotionBlur', lambda x: x is not None)
 async def update_augmented_images(q: Q):
     """
     Update augmented images.

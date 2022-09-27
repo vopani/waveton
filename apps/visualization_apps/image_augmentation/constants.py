@@ -23,5 +23,5 @@ AUGMENTATIONS = [
     'GlassBlur',
     'AdvancedBlur',
     'ColorJitter',
-    'Downscale',
+    'Downscale'
 ]
