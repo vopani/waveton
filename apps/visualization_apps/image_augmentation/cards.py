@@ -73,11 +73,13 @@ def augmentations(tab: str) -> ui.FormCard:
     """
     if tab == 'light':
         augs = [
-            ui.toggle(name='normalize', label='Normalize')
+            ui.toggle(name='Normalize', label='Normalize', trigger=True),
+            ui.toggle(name='RandomGamma', label='RandomGamma', trigger=True)
         ]
     else:
         augs = [
-            ui.toggle(name='blur', label='Blur')
+            ui.toggle(name='Blur', label='Blur', trigger=True),
+            ui.toggle(name='MotionBlur', label='MotionBlur', trigger=True)
         ]
 
     card = ui.form_card(
@@ -100,13 +102,33 @@ def augmentations(tab: str) -> ui.FormCard:
     return card
 
 
-def images() -> ui.FormCard:
+def images(base_image_path: str, augmented_image_paths: list[str]) -> ui.FormCard:
     """
     Card for base and augmented images.
     """
     card = ui.form_card(
         box='images',
-        items=[]
+        items=[
+            ui.separator(label='Base Image'),
+            ui.inline(
+                items=[
+                    ui.image(title='', path=base_image_path, width='200px'),
+                    ui.button(name='new_image', label='Upload New', primary=True)
+                ],
+                justify='around'
+            ),
+            ui.separator(label='Augmented Images'),
+            ui.inline(
+                items=[
+                    ui.image(
+                        title=f'augmented_image_{i}',
+                        path=image_path,
+                        width=f'{100 / len(augmented_image_paths)}%'
+                    ) for i, image_path in enumerate(augmented_image_paths)
+                ],
+                justify='center'
+            )
+        ]
     )
 
     return card

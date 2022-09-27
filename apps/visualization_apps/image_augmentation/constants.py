@@ -1,6 +1,4 @@
-RESIZE_RATIO = 196
-
-LIGHT_AUGS_LIST = [
+AUGMENTATIONS = [
     'Normalize',
     'RandomGamma',
     'RandomGridShuffle',
@@ -16,10 +14,7 @@ LIGHT_AUGS_LIST = [
     'MultiplicativeNoise',
     'FancyPCA',
     'Sharpen',
-    'PixelDropout'
-]
-
-HARD_AUGS_LIST = [
+    'PixelDropout',
     'Blur',
     'MotionBlur',
     'MedianBlur',

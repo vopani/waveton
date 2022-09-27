@@ -1,9 +1,12 @@
 import logging
-from pathlib import Path
+import os
 
+import albumentations as A
+import cv2
 from h2o_wave import Q, main, app, copy_expando, handle_on, on
 
 import cards
+import constants
 
 # Set up logging
 logging.basicConfig(format='%(levelname)s:\t[%(asctime)s]\t%(message)s', level=logging.INFO)
@@ -14,7 +17,6 @@ async def serve(q: Q):
     """
     Main entry point. All queries pass through this function.
     """
-
     try:
         # Initialize the app if not already
         if not q.app.initialized:
@@ -54,7 +56,8 @@ async def initialize_app(q: Q):
     q.app.cards = ['upload', 'table', 'error']
 
     # Upload default image
-    q.app.path_default_image, = await q.site.upload(files=['sample.jpeg'])
+    q.app.default_image = cv2.imread('sample.jpeg')
+    q.app.default_image_path, = await q.site.upload(files=['sample.jpeg'])
 
     q.app.initialized = True
 
@@ -68,6 +71,10 @@ async def initialize_client(q: Q):
     # Set initial argument values
     q.client.theme_dark = True
     q.client.tab = 'light'
+    q.client.base_image_path = q.app.default_image_path
+    q.client.base_image = q.app.default_image
+    q.client.images = 2
+    q.client.augmented_image_paths = [q.client.base_image_path] * q.client.images
 
     # Add layouts, header and footer
     q.page['meta'] = cards.meta
@@ -78,7 +85,10 @@ async def initialize_client(q: Q):
     q.page['augmentations'] = cards.augmentations(
         tab=q.client.tab
     )
-    q.page['images'] = cards.images()
+    q.page['images'] = cards.images(
+        base_image_path=q.client.base_image_path,
+        augmented_image_paths=q.client.augmented_image_paths
+    )
 
     q.client.initialized = True
 
@@ -128,22 +138,82 @@ async def update_tab(q: Q):
     await q.page.save()
 
 
+@on('new_image')
+async def upload_new(q: Q):
+    """
+    Add a new image.
+    """
+    logging.info('Adding a new image')
+
+    q.page['meta'].dialog = cards.dialog_new_image
+
+    await q.page.save()
+
+
 @on('upload')
-async def update_data(q: Q):
+async def upload(q: Q):
     """
-    Update data from csv file.
+    Upload new image.
     """
+    logging.info('Uploading new image')
 
-    logging.info('Updating data from csv file')
+    # Remove dialog
+    q.page['meta'].dialog = None
 
-    # Download data
-    path_data = await q.site.download(q.args.upload[0], '.')
-    data = dt.fread(path_data)
-    name = Path(path_data).name
+    # Update image
+    q.client.base_image_path = q.args.upload[0]
+    q.client.base_image = cv2.imread(q.site.download(q.client.base_image_path, '.'))
 
-    # Update table with data
-    q.page['upload'] = cards.upload(path_default_data=q.app.path_default_data)
-    q.page['table'] = cards.table(name=name, data=data)
+    await update_augmented_images(q)
+
+
+@on('Normalize', lambda x: x is not None)
+@on('RandomGamma', lambda x: x is not None)
+@on('Blur', lambda x: x is not None)
+@on('MotionBlur', lambda x: x is not None)
+async def update_augmented_images(q: Q):
+    """
+    Update augmented images.
+    """
+    logging.info('Updating augmented images')
+
+    # Save settings
+    copy_expando(q.args, q.client)
+
+    # Generate augmented images
+    augmentations = [
+        getattr(A, augmentation)() for augmentation in constants.AUGMENTATIONS if q.client[augmentation]
+    ]
+    augmentation = A.ReplayCompose(augmentations)
+
+    for i in range(q.client.images):
+        augmented_image = augmentation(image=q.client.base_image)['image']
+        cv2.imwrite(f'augmented_image_{i+1}.png', augmented_image)
+
+    # Upload images to Wave server
+    q.client.augmented_image_paths = await q.site.upload([f'augmented_image_{i+1}.png' for i in range(q.client.images)])
+
+    # Remove images locally
+    for i in range(q.client.images):
+        os.remove(f'augmented_image_{i+1}.png')
+
+    # Update images
+    q.page['images'] = cards.images(
+        base_image_path=q.client.base_image_path,
+        augmented_image_paths=q.client.augmented_image_paths
+    )
+
+    await q.page.save()
+
+
+@on('dialog_new_image.dismissed')
+async def dismiss_dialog(q: Q):
+    """
+    Dismiss dialog.
+    """
+    logging.info('Dismissing dialog')
+
+    q.page['meta'].dialog = None
 
     await q.page.save()
 
