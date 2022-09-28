@@ -73,34 +73,49 @@ def augmentations(tab: str, augs: list) -> ui.FormCard:
     """
     if tab == 'light':
         augmentations_list = [
-            'Normalize',
-            'RandomGamma',
-            'RandomGridShuffle',
-            'HueSaturationValue',
-            'RGBShift',
-            'RandomBrightness',
-            'RandomContrast',
             'CLAHE',
-            'ChannelShuffle',
-            'RandomBrightnessContrast',
-            'RandomShadow',
+            'Defocus',
             'Equalize',
-            'MultiplicativeNoise',
             'FancyPCA',
-            'Sharpen',
-            'PixelDropout'
+            'HorizontalFlip',
+            'HueSaturationValue',
+            'MultiplicativeNoise',
+            'Normalize',
+            'PixelDropout',
+            'RandomBrightness',
+            'RandomBrightnessContrast',
+            'RandomContrast',
+            'RandomCrop',
+            'RandomCropFromBorders',
+            'RandomGamma',
+            'RandomRotate90',
+            'RandomScale',
+            'RandomShadow',
+            'Rotate',
+            'SafeRotate',
+            'Spatter',
+            'VerticalFlip',
+
         ]
     else:
         augmentations_list = [
-            'Blur',
-            'MotionBlur',
-            'MedianBlur',
-            'GaussianBlur',
-            'GaussNoise',
-            'GlassBlur',
             'AdvancedBlur',
+            'Blur',
+            'ChannelShuffle',
+            'CoarseDropout',
             'ColorJitter',
-            'Downscale'
+            'Downscale',
+            'GaussianBlur',
+            'GlassBlur',
+            'GaussNoise',
+            'MedianBlur',
+            'MotionBlur',
+            'RandomGridShuffle',
+            'RGBShift',
+            'Sharpen',
+            'ShiftScaleRotate',
+            'ZoomBlur',
+
         ]
 
     aug_values = [ui.toggle(
