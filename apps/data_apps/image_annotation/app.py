@@ -55,7 +55,7 @@ async def initialize_app(q: Q):
     # Set initial argument values
     q.app.cards = ['image_classes', 'image_annotator', 'error']
 
-    q.app.image_path, = await q.site.upload([constants.IMAGE_PATH])
+    q.app.image_path, = await q.site.upload(['sample.jpeg'])
 
     q.app.initialized = True
 

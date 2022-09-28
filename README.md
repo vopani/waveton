@@ -47,7 +47,12 @@ It is recommended to go through the sets in order for best experience, but you m
 
 #### Set 03 • Analysis Apps
 
-#### Set 04 • Visualization Apps
+#### Set 04 • [Visualization Apps](https://github.com/vopani/waveton/tree/main/apps/visualization_apps)
+Applications for vizualizing different forms of data.
+
+| App | Level  | Title                                                                                                        | Description                   |
+|-----|--------|--------------------------------------------------------------------------------------------------------------|-------------------------------|
+| 1   | Expert | [Image Augmentation](https://github.com/vopani/waveton/tree/main/apps/visualization_apps/image_augmentation) | Visualize image augmentations |
 
 #### Set 05 • Modeling Apps
 

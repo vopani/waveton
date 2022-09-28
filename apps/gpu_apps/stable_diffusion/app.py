@@ -174,14 +174,14 @@ async def generate(q: Q):
                 guidance_scale=q.client.guidance_scale
             )['sample'][0]
 
-            image.save(f'sd_image_{i}.png', 'PNG')
+            image.save(f'sd_image_{i+1}.png', 'PNG')
 
     # Upload images to Wave server
-    image_paths = await q.site.upload([f'sd_image_{i}.png' for i in range(q.client.images)])
+    image_paths = await q.site.upload([f'sd_image_{i+1}.png' for i in range(q.client.images)])
 
     # Remove images locally
     for i in range(q.client.images):
-        os.remove(f'sd_image_{i}.png')
+        os.remove(f'sd_image_{i+1}.png')
 
     # Update images
     q.page['main'] = cards.main(
