@@ -39,6 +39,10 @@ async def serve(q: Q):
         elif any([q.args[augmentation] is not None for augmentation in constants.AUGMENTATIONS]):
             await update_augmented_images(q)
 
+        # Update augmented images if number of images is changed
+        elif q.args.images is not None and q.args.images != q.client.images:
+            await update_augmented_images(q)
+
         # Delegate query to query handlers
         elif await handle_on(q):
             pass
@@ -80,6 +84,7 @@ async def initialize_client(q: Q):
     q.client.base_image = q.app.default_image
     q.client.images = 2
     q.client.augmented_image_paths = [q.client.base_image_path] * q.client.images
+    q.client.augmentations = []
     for augmentation in constants.AUGMENTATIONS:
         q.client[augmentation] = False
 
@@ -89,10 +94,12 @@ async def initialize_client(q: Q):
     q.page['footer'] = cards.footer
 
     # Add cards for the main page
-    q.page['augmentations'] = cards.augmentations(tab=q.client.tab, toggle_values=expando_to_dict(q.client))
+    q.page['augmentations'] = cards.augmentations(tab=q.client.tab, augs=q.client.augmentations)
     q.page['images'] = cards.images(
         base_image_path=q.client.base_image_path,
-        augmented_image_paths=q.client.augmented_image_paths
+        augmented_image_paths=q.client.augmented_image_paths,
+        n_images=q.client.images,
+        augs=q.client.augmentations
     )
 
     q.client.initialized = True
@@ -136,7 +143,7 @@ async def update_tab(q: Q):
         logging.info('Updating tab from heavy to light')
 
     # Update list of augmentations
-    q.page['augmentations'] = cards.augmentations(tab=q.client.tab, toggle_values=expando_to_dict(q.client))
+    q.page['augmentations'] = cards.augmentations(tab=q.client.tab, augs=q.client.augmentations)
 
     await q.page.save()
 
@@ -170,6 +177,33 @@ async def upload(q: Q):
     await update_augmented_images(q)
 
 
+@on('reset')
+async def reset_augmentations(q: Q):
+    """
+    Reset augmentations.
+    """
+    logging.info('Resetting augmentations')
+
+    # Clearing all augmentations
+    q.client.augmentations = []
+    for augmentation in constants.AUGMENTATIONS:
+        q.client[augmentation] = False
+
+    # Default image
+    q.client.augmented_image_paths = [q.client.base_image_path] * q.client.images
+
+    # Update augmentations and images
+    q.page['augmentations'] = cards.augmentations(tab=q.client.tab, augs=q.client.augmentations)
+    q.page['images'] = cards.images(
+        base_image_path=q.client.base_image_path,
+        augmented_image_paths=q.client.augmented_image_paths,
+        n_images=q.client.images,
+        augs=q.client.augmentations
+    )
+
+    await q.page.save()
+
+
 async def update_augmented_images(q: Q):
     """
     Update augmented images.
@@ -178,28 +212,38 @@ async def update_augmented_images(q: Q):
 
     # Save settings
     copy_expando(q.args, q.client)
+    q.client.augmentations = sorted(
+        [augmentation for augmentation in constants.AUGMENTATIONS if q.client[augmentation]]
+    )
 
-    # Generate augmented images
-    augmentations = [
-        getattr(A, augmentation)() for augmentation in constants.AUGMENTATIONS if q.client[augmentation]
-    ]
-    augmentation = A.ReplayCompose(augmentations)
+    # Compile list of augmentations
+    augmentations = [getattr(A, augmentation)() for augmentation in q.client.augmentations]
 
-    for i in range(q.client.images):
-        augmented_image = augmentation(image=q.client.base_image)['image']
-        cv2.imwrite(f'augmented_image_{i+1}.png', augmented_image)
+    if len(augmentations) == 0:
+        # Default image if no augmentations
+        q.client.augmented_image_paths = [q.client.base_image_path] * q.client.images
+    else:
+        # Generate augmented images
+        augmentation = A.ReplayCompose(augmentations)
+        for i in range(q.client.images):
+            augmented_image = augmentation(image=q.client.base_image)['image']
+            cv2.imwrite(f'augmented_image_{i+1}.png', augmented_image)
 
-    # Upload images to Wave server
-    q.client.augmented_image_paths = await q.site.upload([f'augmented_image_{i+1}.png' for i in range(q.client.images)])
+        # Upload images to Wave server
+        q.client.augmented_image_paths = await q.site.upload(
+            [f'augmented_image_{i+1}.png' for i in range(q.client.images)]
+        )
 
-    # Remove images locally
-    for i in range(q.client.images):
-        os.remove(f'augmented_image_{i+1}.png')
+        # Remove images locally
+        for i in range(q.client.images):
+            os.remove(f'augmented_image_{i+1}.png')
 
     # Update images
     q.page['images'] = cards.images(
         base_image_path=q.client.base_image_path,
-        augmented_image_paths=q.client.augmented_image_paths
+        augmented_image_paths=q.client.augmented_image_paths,
+        n_images=q.client.images,
+        augs=q.client.augmentations
     )
 
     await q.page.save()

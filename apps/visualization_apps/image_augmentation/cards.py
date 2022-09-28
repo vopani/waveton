@@ -67,7 +67,7 @@ fallback = ui.form_card(
 )
 
 
-def augmentations(tab: str, toggle_values: dict) -> ui.FormCard:
+def augmentations(tab: str, augs: list) -> ui.FormCard:
     """
     Card for augmentations.
     """
@@ -103,10 +103,12 @@ def augmentations(tab: str, toggle_values: dict) -> ui.FormCard:
             'Downscale'
         ]
 
-    augs = [
-        ui.toggle(name=augmentation, label=augmentation, value=toggle_values[augmentation], trigger=True)
-        for augmentation in augmentations_list
-    ]
+    aug_values = [ui.toggle(
+        name=augmentation,
+        label=augmentation,
+        value=augmentation in augs,
+        trigger=True
+    ) for augmentation in augmentations_list]
 
     card = ui.form_card(
         box='augmentations',
@@ -121,17 +123,19 @@ def augmentations(tab: str, toggle_values: dict) -> ui.FormCard:
                 value=tab,
                 link=True
             ),
-            *augs
+            *aug_values
         ]
     )
 
     return card
 
 
-def images(base_image_path: str, augmented_image_paths: list[str]) -> ui.FormCard:
+def images(base_image_path: str, augmented_image_paths: list[str], n_images: int, augs: list) -> ui.FormCard:
     """
     Card for base and augmented images.
     """
+    augs_visible = len(augs) > 0
+
     card = ui.form_card(
         box='images',
         items=[
@@ -149,10 +153,28 @@ def images(base_image_path: str, augmented_image_paths: list[str]) -> ui.FormCar
                     ui.image(
                         title=f'augmented_image_{i}',
                         path=image_path,
-                        width=f'{100 / len(augmented_image_paths)}%'
+                        width='25%'
                     ) for i, image_path in enumerate(augmented_image_paths)
                 ],
                 justify='center'
+            ),
+            ui.inline(
+                items=[
+                    ui.slider(name='images', label='Images', min=1, max=4, value=n_images, trigger=True, width='200px'),
+                    ui.button(name='reset', label='Reset', primary=True)
+                ],
+                justify='center'
+            ),
+            ui.stats(
+                items=[ui.stat(
+                    label='',
+                    value='Augmentations',
+                    caption=', '.join(augs),
+                    icon='PhotoCollection',
+                    icon_color='#FEC924'
+                )],
+                justify='center',
+                visible=augs_visible
             )
         ]
     )
