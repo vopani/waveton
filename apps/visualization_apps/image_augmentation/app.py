@@ -215,9 +215,10 @@ async def update_augmented_images(q: Q):
     q.client.augmentations = sorted(
         [augmentation for augmentation in constants.AUGMENTATIONS if q.client[augmentation]]
     )
-
+    # Set Default probability as 1.0
+    param_values = {"p": 1.0}
     # Compile list of augmentations
-    augmentations = [getattr(A, augmentation)() for augmentation in q.client.augmentations]
+    augmentations = [getattr(A, augmentation)(**param_values) for augmentation in q.client.augmentations]
 
     if len(augmentations) == 0:
         # Default image if no augmentations
