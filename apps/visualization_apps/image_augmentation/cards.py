@@ -21,7 +21,7 @@ meta = ui.meta_card(
                 ui.zone(name='header'),
                 ui.zone(
                     name='main',
-                    size='calc(100vh - 150px)',
+                    size='calc(100vh - 130px)',
                     direction='row',
                     zones=[
                         ui.zone(name='augmentations', size='25%'),
@@ -94,8 +94,7 @@ def augmentations(tab: str, augs: list) -> ui.FormCard:
             'Rotate',
             'SafeRotate',
             'Spatter',
-            'VerticalFlip',
-
+            'VerticalFlip'
         ]
     else:
         augmentations_list = [
@@ -114,8 +113,7 @@ def augmentations(tab: str, augs: list) -> ui.FormCard:
             'RGBShift',
             'Sharpen',
             'ShiftScaleRotate',
-            'ZoomBlur',
-
+            'ZoomBlur'
         ]
 
     aug_values = [ui.toggle(

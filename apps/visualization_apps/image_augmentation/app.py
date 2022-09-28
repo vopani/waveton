@@ -3,7 +3,7 @@ import os
 
 import albumentations as A
 import cv2
-from h2o_wave import Q, main, app, copy_expando, expando_to_dict, handle_on, on
+from h2o_wave import Q, main, app, copy_expando, handle_on, on
 
 import cards
 import constants
@@ -17,7 +17,6 @@ async def serve(q: Q):
     """
     Main entry point. All queries pass through this function.
     """
-    print(q.args)
     try:
         # Initialize the app if not already
         if not q.app.initialized:
@@ -215,10 +214,9 @@ async def update_augmented_images(q: Q):
     q.client.augmentations = sorted(
         [augmentation for augmentation in constants.AUGMENTATIONS if q.client[augmentation]]
     )
-    # Set Default probability as 1.0
-    param_values = {"p": 1.0}
+
     # Compile list of augmentations
-    augmentations = [getattr(A, augmentation)(**param_values) for augmentation in q.client.augmentations]
+    augmentations = [getattr(A, augmentation)(p=1.0) for augmentation in q.client.augmentations]
 
     if len(augmentations) == 0:
         # Default image if no augmentations
