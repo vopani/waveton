@@ -13,9 +13,8 @@
 </div>
 
 ## Set 05 • Visualization Apps 🖥️
-Applications that help with data preparation, cleaning, transformation, annotation and adhoc processing.
+Applications for vizualizing different forms of data.
 
-| App | Level        | Title | Description |
-| --- | ------------ | ----- | ----------- |
-| 1   | Beginner     | [Image Augmentation](https://github.com/vopani/waveton/tree/main/apps/visualization_apps/image_augmentation) | Visualize the augmented Images for computer vision tasks. |
-
+| App | Level  | Title                                                                                                        | Description                   |
+|-----|--------|--------------------------------------------------------------------------------------------------------------|-------------------------------|
+| 1   | Expert | [Image Augmentation](https://github.com/vopani/waveton/tree/main/apps/visualization_apps/image_augmentation) | Visualize image augmentations |

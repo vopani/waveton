@@ -13,7 +13,7 @@
 </div>
 
 ## Image Augmentation 🖥️
-Visualize Augmented images for computer vision tasks.
+Visualize image augmentations.
 
 ![](demo.gif)
 
