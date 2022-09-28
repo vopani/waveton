@@ -167,8 +167,7 @@ def images(base_image_path: str, augmented_image_paths: list[str], n_images: int
             ),
             ui.stats(
                 items=[ui.stat(
-                    label='',
-                    value='Augmentations',
+                    label='Augmentations',
                     caption=', '.join(augs),
                     icon='PhotoCollection',
                     icon_color='#FEC924'
