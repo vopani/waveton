@@ -30,13 +30,13 @@ There are a total of 100 Wave applications broadly divided into 10 sets, with 10
 It is recommended to go through the sets in order for best experience, but you may explore them in any order depending on your expertise.
 
 #### Set 01 • [Skeleton Apps](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps)
-| App | Level        | Title                                                                                           | Description                         |
-|-----|--------------|-------------------------------------------------------------------------------------------------|-------------------------------------|
-| 1   | Beginner     | [Hello Wave](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/hello_wave)         | Hello World example                 |
-| 2   | Beginner     | [Basic Template](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/basic_template) | Building blocks to kickstart an app |
-| 3   | Beginner     | [Theme Switch](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/theme_switch)     | Switch between light and dark modes |
-| 4   | Beginner     | [CSV Loader](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/csv_loader)         | Load a csv file into a table        |
-
+| App | Level        | Title                                                                                           | Description                             |
+|-----|--------------|-------------------------------------------------------------------------------------------------|-----------------------------------------|
+| 1   | Beginner     | [Hello Wave](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/hello_wave)         | Hello World example                     |
+| 2   | Beginner     | [Basic Template](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/basic_template) | Building blocks to kickstart an app     |
+| 3   | Beginner     | [Theme Switch](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/theme_switch)     | Switch between light and dark modes     |
+| 4   | Beginner     | [CSV Loader](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/csv_loader)         | Load a csv file into a table            |
+| 5   | Intermediate | [Table Showcase](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/table_showcase) | Various features of the table component |
 
 #### Set 02 • [Data Apps](https://github.com/vopani/waveton/tree/main/apps/data_apps)
 | App | Level        | Title                                                                                                   | Description                                          |
