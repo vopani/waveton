@@ -39,20 +39,20 @@ It is recommended to go through the sets in order for best experience, but you m
 | 5   | Intermediate | [Table Showcase](https://github.com/vopani/waveton/tree/main/apps/skeleton_apps/table_showcase) | Various features of the table component | ![](apps/skeleton_apps/table_showcase/demo.gif) |
 
 #### Set 02 • [Data Apps](https://github.com/vopani/waveton/tree/main/apps/data_apps)
-| App | Level        | Title                                                                                                   | Description                                          |
-|-----|--------------|---------------------------------------------------------------------------------------------------------|------------------------------------------------------|
-| 1   | Beginner     | [Datatable Playground](https://github.com/vopani/waveton/tree/main/apps/data_apps/datatable_playground) | Explore Python Datatable with tabular datasets       |
-| 2   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/ner_annotation)             | Annotate entities for Named-Entity Recognition tasks |
-| 3   | Intermediate | [Image Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/image_annotation)         | Annotate images for computer vision tasks            |
+| App | Level        | Title                                                                                                   | Description                                          | Demo                                              |
+|-----|--------------|---------------------------------------------------------------------------------------------------------|------------------------------------------------------|---------------------------------------------------|
+| 1   | Beginner     | [Datatable Playground](https://github.com/vopani/waveton/tree/main/apps/data_apps/datatable_playground) | Explore Python Datatable with tabular datasets       | ![](apps/data_apps/datatable_playground/demo.gif) |
+| 2   | Intermediate | [NER Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/ner_annotation)             | Annotate entities for Named-Entity Recognition tasks | ![](apps/data_apps/ner_annotation/demo.gif)       |
+| 3   | Intermediate | [Image Annotation](https://github.com/vopani/waveton/tree/main/apps/data_apps/image_annotation)         | Annotate images for computer vision tasks            | ![](apps/data_apps/image_annotation/demo.gif)     |
 
 #### Set 03 • Analysis Apps
 
 #### Set 04 • [Visualization Apps](https://github.com/vopani/waveton/tree/main/apps/visualization_apps)
 Applications for vizualizing different forms of data.
 
-| App | Level  | Title                                                                                                        | Description                   |
-|-----|--------|--------------------------------------------------------------------------------------------------------------|-------------------------------|
-| 1   | Expert | [Image Augmentation](https://github.com/vopani/waveton/tree/main/apps/visualization_apps/image_augmentation) | Visualize image augmentations |
+| App | Level  | Title                                                                                                        | Description                   | Demo                                                     |
+|-----|--------|--------------------------------------------------------------------------------------------------------------|-------------------------------|----------------------------------------------------------|
+| 1   | Expert | [Image Augmentation](https://github.com/vopani/waveton/tree/main/apps/visualization_apps/image_augmentation) | Visualize image augmentations | ![](apps/visualization_apps/image_augmentation/demo.gif) |
 
 #### Set 05 • Modeling Apps
 
@@ -61,17 +61,17 @@ Applications for vizualizing different forms of data.
 #### Set 07 • Industry Apps
 
 #### Set 08 • [Deep Learning Apps](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps)
-| App | Level        | Title                                                                                                                           | Description                                   |
-|-----|--------------|---------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
-| 1   | Expert       | [Automatic Speech Recognition](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/automatic_speech_recognition) | Speech to text in English using Wav2Vec model |
-| 2   | Expert       | [Whisper](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/whisper)                                           | Speech to text using OpenAI's Whisper model   |
+| App | Level        | Title                                                                                                                           | Description                                   | Demo                                                              |
+|-----|--------------|---------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------|-------------------------------------------------------------------|
+| 1   | Expert       | [Automatic Speech Recognition](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/automatic_speech_recognition) | Speech to text in English using Wav2Vec model | ![](apps/deeplearning_apps/automatic_speech_recognition/demo.gif) |
+| 2   | Expert       | [Whisper](https://github.com/vopani/waveton/tree/main/apps/deeplearning_apps/whisper)                                           | Speech to text using OpenAI's Whisper model   | ![](apps/deeplearning_apps/whisper/demo.gif)                      |
 
 #### Set 09 • Doppelganger Apps
 
 #### Set 10 • [GPU Apps](https://github.com/vopani/waveton/tree/main/apps/gpu_apps)
-| App | Level        | Title                                                                                          | Description                                               |
-|-----|--------------|------------------------------------------------------------------------------------------------|-----------------------------------------------------------|
-| 1   | Intermediate | [Stable Diffusion](https://github.com/vopani/waveton/tree/main/apps/gpu_apps/stable_diffusion) | Generate images from prompts using Stable Diffusion model |
+| App | Level        | Title                                                                                          | Description                                               | Demo                                         |
+|-----|--------------|------------------------------------------------------------------------------------------------|-----------------------------------------------------------|----------------------------------------------|
+| 1   | Intermediate | [Stable Diffusion](https://github.com/vopani/waveton/tree/main/apps/gpu_apps/stable_diffusion) | Generate images from prompts using Stable Diffusion model | ![](apps/gpu_apps/stable_diffusion/demo.gif) |
 
 **P.S.** Every application can be run independently
 
